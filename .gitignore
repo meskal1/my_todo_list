@@ -37,3 +37,4 @@ webpack.config.js
 deploy.sh
 craco.config.js
 compress-cra.json
+.storybook
