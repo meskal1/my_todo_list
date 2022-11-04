@@ -1,13 +1,17 @@
 import React from 'react'
+
 type FilterValuesType = 'all' | 'active' | 'completed'
+
 export type TodolistType = {
   id: string
   title: string
   filter: string
 }
+
 const initialState: Array<TodolistType> = []
 
 type TodolistReducerType = TasksFilterValueACType | RemoveTodolistACType | AddTodolistACType | ChangeTodolistTitleACType
+
 export const todolistReducer = (state: Array<TodolistType> = initialState, action: TodolistReducerType): Array<TodolistType> => {
   switch (action.type) {
     case 'TASKS_FILTER_VALUE': {
@@ -41,7 +45,8 @@ export const tasksFilterValueAC = (todolistID: string, filterValue: FilterValues
     },
   } as const
 }
-type RemoveTodolistACType = ReturnType<typeof removeTodolistAC>
+
+export type RemoveTodolistACType = ReturnType<typeof removeTodolistAC>
 export const removeTodolistAC = (todolistID: string) => {
   return {
     type: 'REMOVE_TODOLIST',
@@ -50,23 +55,25 @@ export const removeTodolistAC = (todolistID: string) => {
     },
   } as const
 }
-type AddTodolistACType = ReturnType<typeof addTodolistAC>
-export const addTodolistAC = (todolistTitle: string, todolistID: string) => {
+
+export type AddTodolistACType = ReturnType<typeof addTodolistAC>
+export const addTodolistAC = (todolistID: string, todolistTitle: string) => {
   return {
     type: 'ADD_TODOLIST',
     payload: {
-      todolistTitle: todolistTitle,
       todolistID: todolistID,
+      todolistTitle: todolistTitle,
     },
   } as const
 }
+
 type ChangeTodolistTitleACType = ReturnType<typeof changeTodolistTitleAC>
 export const changeTodolistTitleAC = (todolistID: string, todolistTitle: string) => {
   return {
     type: 'CHANGE_TODOLIST_TITLE',
     payload: {
-      todolistTitle: todolistTitle,
       todolistID: todolistID,
+      todolistTitle: todolistTitle,
     },
   } as const
 }
