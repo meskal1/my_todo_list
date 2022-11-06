@@ -38,3 +38,4 @@ deploy.sh
 craco.config.js
 compress-cra.json
 .storybook
+swiped-events.js

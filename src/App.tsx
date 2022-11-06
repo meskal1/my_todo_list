@@ -23,11 +23,10 @@ const App = () => {
 
   const todolistsData = todolists.map(todolist => {
     let filteredTasks = tasks[todolist.id]
-
     return (
-      <Grid item>
+      <Grid item key={todolist.id}>
         <Paper style={{ padding: '10px' }}>
-          <Todolist key={todolist.id} todolistID={todolist.id} tasks={filteredTasks} title={todolist.title} filterValue={todolist.filter} />
+          <Todolist todolistID={todolist.id} tasks={filteredTasks} title={todolist.title} filterValue={todolist.filter} />
         </Paper>
       </Grid>
     )

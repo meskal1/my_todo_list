@@ -45,21 +45,21 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
 
   const onClickAddTaskHandler = useCallback((taskTitle: string) => dispatch(addTaskAC(todolistID, taskTitle)), [todolistID])
 
-  const onAllClickHandler = () => {
+  const onAllClickHandler = useCallback(() => {
     dispatch(tasksFilterValueAC(todolistID, 'all'))
-  }
+  }, [])
 
-  const onActiveClickHandler = () => {
+  const onActiveClickHandler = useCallback(() => {
     dispatch(tasksFilterValueAC(todolistID, 'active'))
-  }
+  }, [])
 
-  const onCompletedClickHandler = () => {
+  const onCompletedClickHandler = useCallback(() => {
     dispatch(tasksFilterValueAC(todolistID, 'completed'))
-  }
+  }, [])
 
-  const onClickRemoveHandler = () => {
+  const onClickRemoveHandler = useCallback(() => {
     dispatch(removeTodolistAC(todolistID))
-  }
+  }, [])
 
   return (
     <>

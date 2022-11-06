@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
+import React, { ChangeEvent, useState, KeyboardEvent, useCallback } from 'react'
 import s from '../todolist/Todolist.module.scss'
 import { IconButton, TextField } from '@mui/material'
 import { ControlPoint } from '@mui/icons-material'
@@ -9,11 +9,11 @@ export type AddItemFormType = {
 
 export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem }) => {
   console.log('render ADD_INPUT')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string>('')
   const [inputValue, setInputValue] = useState('')
 
   const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setError(null)
+    setError('')
     setInputValue(e.currentTarget.value)
   }
 

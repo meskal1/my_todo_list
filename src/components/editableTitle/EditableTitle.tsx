@@ -1,5 +1,5 @@
-import { TextField } from '@mui/material'
-import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
+import { Input, TextField } from '@mui/material'
+import React, { ChangeEvent, useState, KeyboardEvent, useCallback } from 'react'
 
 export type EditableTitleType = {
   itemTitle: string
@@ -13,11 +13,11 @@ export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitl
 
   const onDoubleClickSpan = () => {
     setTitleValue(itemTitle)
-    setEditable(!editable)
+    setEditable(true)
   }
 
   const onBlurInput = () => {
-    setEditable(!editable)
+    setEditable(false)
     onChange(titleValue)
   }
 

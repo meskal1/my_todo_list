@@ -17,17 +17,17 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, isCheck
   console.log('render TASK')
   const dispatch = useDispatch()
 
-  const onClickButtonHandler = () => {
+  const onClickButtonHandler = useCallback(() => {
     dispatch(removeTaskAC(todolistID, taskID))
-  }
-
-  const onChangeInputHandler = () => {
-    dispatch(changeTaskStatusAC(todolistID, taskID, !isChecked))
-  }
-
-  const onChangeTaskTitle = useCallback((taskTitle: string) => {
-    dispatch(changeTaskTitleAC(todolistID, taskID, taskTitle))
   }, [])
+
+  const onChangeInputHandler = useCallback(() => {
+    dispatch(changeTaskStatusAC(todolistID, taskID, !isChecked))
+  }, [isChecked])
+
+  const onChangeTaskTitle = (taskTitle: string) => {
+    dispatch(changeTaskTitleAC(todolistID, taskID, taskTitle))
+  }
 
   return (
     <>
