@@ -1,18 +1,49 @@
 import { ReduxStoreProviderDecorator } from '../../../stories/ReduxStoreProviderDecorator'
 import { Task } from './Task'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import { useSelector } from 'react-redux'
+import { AppRootStateType } from '../../../redux/store'
+import { TasksType } from './TaskReducer'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
   title: 'Todolist/Task',
   component: Task,
+  argTypes: {},
   decorators: [ReduxStoreProviderDecorator],
 } as ComponentMeta<typeof Task>
 
-export const TaskExample = () => {
+const TaskIsDoneWithRedux = () => {
+  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
   return (
-    <>
-      <Task taskID={'1'} taskTitle={'Babel'} isChecked={true} todolistID={'1'} />
-      <Task taskID={'2'} taskTitle={'Js'} isChecked={false} todolistID={'2'} />
-    </>
+    <Task
+      taskID={tasks.todolistId1[0].id}
+      taskTitle={tasks.todolistId1[0].title}
+      isChecked={tasks.todolistId1[0].isDone}
+      todolistID={'todolistId1'}
+    />
   )
 }
+
+const TaskNotDoneWithRedux = () => {
+  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
+  return (
+    <Task
+      taskID={tasks.todolistId1[1].id}
+      taskTitle={tasks.todolistId1[1].title}
+      isChecked={tasks.todolistId1[1].isDone}
+      todolistID={'todolistId1'}
+    />
+  )
+}
+
+const TemplateIsDone: ComponentStory<typeof TaskIsDoneWithRedux> = () => <TaskIsDoneWithRedux />
+
+const TemplateNotDone: ComponentStory<typeof TaskNotDoneWithRedux> = () => <TaskNotDoneWithRedux />
+
+export const TaskIsDoneExample = TemplateIsDone.bind({})
+
+TaskIsDoneExample.args = {}
+
+export const TaskIsNotDoneExample = TemplateNotDone.bind({})
+
+TaskIsNotDoneExample.args = {}

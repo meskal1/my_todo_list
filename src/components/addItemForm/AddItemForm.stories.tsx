@@ -7,8 +7,10 @@ export default {
   component: AddItemForm,
 } as ComponentMeta<typeof AddItemForm>
 
-const callback = action('Add Button or key "Enter" was pressed inside form')
+const Template: ComponentStory<typeof AddItemForm> = args => <AddItemForm {...args} />
 
-export const AddItemFormExample = () => {
-  return <AddItemForm addItem={callback} />
+export const AddItemFormExample = Template.bind({})
+
+AddItemFormExample.args = {
+  addItem: action('Add Button or key "Enter" was pressed inside form'),
 }

@@ -6,15 +6,15 @@ import { action } from '@storybook/addon-actions'
 export default {
   title: 'Todolist/EditableTitle',
   component: EditableTitle,
+  argTypes: {},
   decorators: [ReduxStoreProviderDecorator],
 } as ComponentMeta<typeof EditableTitle>
 
-const callback = action('Value was edited')
+const Template: ComponentStory<typeof EditableTitle> = args => <EditableTitle {...args} />
 
-export const EditableTitleExample = () => {
-  return (
-    <>
-      <EditableTitle itemTitle={'Editable value'} onChange={callback} />
-    </>
-  )
+export const EditableTitleExample = Template.bind({})
+
+EditableTitleExample.args = {
+  itemTitle: 'Editable value',
+  onChange: action('Value was edited'),
 }
