@@ -43,13 +43,27 @@ export const DeleteTask = () => {
 
 export const UpdateTask = () => {
   const [state, setState] = useState<any>(null)
+  const deadline = ''
+  const description = ''
+  const priority = 2
+  const startDate = ''
+  const status = 0
+  const title = 'DDDDD'
   useEffect(() => {
     const todolistID = '3ffe6c35-7670-4aef-bba4-3195dc5a0100'
     const taskId = 'b23539ae-c360-460f-b449-db8b9f93eeb8'
-    const title = 'DDDDD'
-    taskAPI.updateTask(todolistID, taskId, title).then(res => {
-      setState(res.data)
-    })
+    taskAPI
+      .updateTask(todolistID, taskId, {
+        deadline: deadline,
+        description: description,
+        priority: priority,
+        startDate: startDate,
+        status: status,
+        title: title,
+      })
+      .then(res => {
+        setState(res.data)
+      })
   }, [])
   return <div>{JSON.stringify(state)}</div>
 }

@@ -6,14 +6,14 @@ import s from './App.module.scss'
 import { AppRootStateType } from './redux/store'
 import { TasksType } from './components/todolist/task/TaskReducer'
 import { Todolist } from './components/todolist/Todolist'
-import { addTodolistAC, TodolistType } from './components/todolist/TodolistReducer'
+import { addTodolistAC, TodolistDomainType } from './components/todolist/TodolistReducer'
 import { AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
 const App = () => {
   console.log('render APP')
   const dispatch = useDispatch()
-  const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
+  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
   const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
 
   const addTodolist = useCallback((todolistTitle: string) => {

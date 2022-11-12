@@ -1,10 +1,40 @@
 //DAL
 import axios from 'axios'
 
-type TodolistType = {
+export type TodolistType = {
   id: string
+  title: string
   addedDate: string
   order: number
+}
+
+export type ResponseTaskType = {
+  id: string
+  title: string
+  description: string
+  todoListId: string
+  order: number
+  status: number
+  priority: number
+  startDate: string
+  deadline: string
+  addedDate: string
+}
+
+type TasksType = {
+  error: string | null
+  totalCount: number
+  items: {
+    item: Array<ResponseTaskType>
+  }
+}
+
+type UpdateTaskModelType = {
+  deadline: string
+  description: string
+  priority: number
+  startDate: string
+  status: number
   title: string
 }
 
@@ -35,5 +65,17 @@ export const todolistAPI = {
   },
   updateTodolistTitle(todolistID: string, title: string) {
     return instance.put<ResponseType>(`todo-lists/${todolistID}`, { title })
+  },
+  getTasks(todolistID: string) {
+    return instance.get<TasksType>(`todo-lists/${todolistID}/tasks`)
+  },
+  createTask(todolistID: string, title: string) {
+    return instance.post<ResponseType<ResponseTaskType>>(`todo-lists/${todolistID}/tasks`, { title })
+  },
+  deleteTask(todolistID: string, taskId: string) {
+    return instance.delete<ResponseType>(`todo-lists/${todolistID}/tasks/${taskId}`)
+  },
+  updateTask(todolistID: string, taskId: string, model: UpdateTaskModelType) {
+    return instance.put<ResponseType>(`todo-lists/${todolistID}/tasks/${taskId}`, model)
   },
 }

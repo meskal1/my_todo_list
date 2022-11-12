@@ -1,18 +1,25 @@
 import React from 'react'
+import { TodolistType } from './Todolist-api'
 
 type FilterValuesType = 'all' | 'active' | 'completed'
 
-export type TodolistType = {
-  id: string
-  title: string
-  filter: string
-}
+// export type TodolistType = {
+//   id: string
+//   title: string
+//   filter: string
+// }
 
-const initialState: Array<TodolistType> = []
+export type TodolistDomainType = TodolistType & { filter: string }
+
+const initialState: Array<TodolistDomainType> = []
+// const initialState: Array<TodolistType> = []
 
 type TodolistReducerType = TasksFilterValueACType | RemoveTodolistACType | AddTodolistACType | ChangeTodolistTitleACType
 
-export const todolistReducer = (state: Array<TodolistType> = initialState, action: TodolistReducerType): Array<TodolistType> => {
+export const todolistReducer = (
+  state: Array<TodolistDomainType> = initialState,
+  action: TodolistReducerType
+): Array<TodolistDomainType> => {
   switch (action.type) {
     case 'TASKS_FILTER_VALUE': {
       return state.map(todolist =>
@@ -23,7 +30,7 @@ export const todolistReducer = (state: Array<TodolistType> = initialState, actio
       return state.filter(todolist => todolist.id !== action.payload.todolistID)
     }
     case 'ADD_TODOLIST': {
-      return [{ id: action.payload.todolistID, title: action.payload.todolistTitle, filter: 'all' }, ...state]
+      return [{ id: action.payload.todolistID, title: action.payload.todolistTitle, addedDate: '', order: 0, filter: 'all' }, ...state]
     }
     case 'CHANGE_TODOLIST_TITLE': {
       return state.map(todolist =>
