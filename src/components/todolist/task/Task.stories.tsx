@@ -18,19 +18,19 @@ const TaskIsDoneWithRedux = () => {
     <Task
       taskID={tasks.todolistId1[0].id}
       taskTitle={tasks.todolistId1[0].title}
-      isChecked={tasks.todolistId1[0].isDone}
+      status={tasks.todolistId1[0].status}
       todolistID={'todolistId1'}
     />
   )
 }
 
-const TaskNotDoneWithRedux = () => {
+const TaskIsNotDoneWithRedux = () => {
   const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
   return (
     <Task
       taskID={tasks.todolistId1[1].id}
       taskTitle={tasks.todolistId1[1].title}
-      isChecked={tasks.todolistId1[1].isDone}
+      status={tasks.todolistId1[1].status}
       todolistID={'todolistId1'}
     />
   )
@@ -38,7 +38,7 @@ const TaskNotDoneWithRedux = () => {
 
 const TemplateIsDone: ComponentStory<typeof TaskIsDoneWithRedux> = () => <TaskIsDoneWithRedux />
 
-const TemplateNotDone: ComponentStory<typeof TaskNotDoneWithRedux> = () => <TaskNotDoneWithRedux />
+const TemplateNotDone: ComponentStory<typeof TaskIsNotDoneWithRedux> = () => <TaskIsNotDoneWithRedux />
 
 export const TaskIsDoneExample = TemplateIsDone.bind({})
 

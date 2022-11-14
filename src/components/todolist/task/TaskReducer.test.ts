@@ -1,17 +1,27 @@
 import { addTodolistAC, removeTodolistAC } from '../TodolistReducer'
 import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer, TasksType } from './TaskReducer'
+import { TaskPriorities, TaskStatuses } from '../Todolist-api'
+
+const restProps = {
+  description: '',
+  order: 0,
+  priority: TaskPriorities.Low,
+  startDate: '',
+  deadline: '',
+  addedDate: '',
+}
 
 test('case should remove task in correct todolist', () => {
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'Title1', isDone: false },
-      { id: '2', title: 'Title2', isDone: true },
-      { id: '3', title: 'Title2', isDone: true },
+      { id: '1', title: 'Title1', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
     todoListID2: [
-      { id: '1', title: 'Title1', isDone: false },
-      { id: '2', title: 'Title2', isDone: true },
-      { id: '3', title: 'Title2', isDone: true },
+      { id: '1', title: 'Title1', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+      { id: '2', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+      { id: '3', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
     ],
   }
 
@@ -29,14 +39,14 @@ test('case should add task in correct todolist', () => {
 
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'CSS', isDone: false },
-      { id: '2', title: 'JS', isDone: true },
-      { id: '3', title: 'React', isDone: true },
+      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
     todoListID2: [
-      { id: '1', title: 'Babel', isDone: false },
-      { id: '2', title: 'Webpack', isDone: true },
-      { id: '3', title: 'Gulp', isDone: true },
+      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
     ],
   }
 
@@ -48,20 +58,20 @@ test('case should add task in correct todolist', () => {
   expect(endState.todoListID2.length).toBe(4)
   expect(endState.todoListID2[0].id).toBeDefined()
   expect(endState.todoListID2[0].title).toBe(taskTitle)
-  expect(endState.todoListID2[0].isDone).toBe(false)
+  expect(endState.todoListID2[0].status).toBe(TaskStatuses.New)
 })
 
 test('status of specified task should changed', () => {
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'CSS', isDone: false },
-      { id: '2', title: 'JS', isDone: true },
-      { id: '3', title: 'React', isDone: true },
+      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
     todoListID2: [
-      { id: '1', title: 'Babel', isDone: false },
-      { id: '2', title: 'Webpack', isDone: true },
-      { id: '3', title: 'Gulp', isDone: true },
+      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
     ],
   }
 
@@ -69,8 +79,8 @@ test('status of specified task should changed', () => {
 
   const endState: TasksType = taskReducer(startState, action)
 
-  expect(endState.todoListID1[2].isDone).toBeTruthy()
-  expect(endState.todoListID2[2].isDone).toBeFalsy()
+  expect(endState.todoListID1[2].status).toBe(TaskStatuses.Completed)
+  expect(endState.todoListID2[2].status).toBe(TaskStatuses.New)
 })
 
 test('title of specified task should changed', () => {
@@ -78,14 +88,14 @@ test('title of specified task should changed', () => {
 
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'CSS', isDone: false },
-      { id: '2', title: 'JS', isDone: true },
-      { id: '3', title: 'React', isDone: true },
+      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
     todoListID2: [
-      { id: '1', title: 'Babel', isDone: false },
-      { id: '2', title: 'Webpack', isDone: true },
-      { id: '3', title: 'Gulp', isDone: true },
+      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
     ],
   }
 
@@ -100,9 +110,9 @@ test('title of specified task should changed', () => {
 test('empty array of tasks should be added when new todolist added', () => {
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'CSS', isDone: false },
-      { id: '2', title: 'JS', isDone: true },
-      { id: '3', title: 'React', isDone: true },
+      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
   }
 
@@ -121,14 +131,14 @@ test('empty array of tasks should be added when new todolist added', () => {
 test('array of tasks should be deleted when todolist deleted', () => {
   const startState: TasksType = {
     todoListID1: [
-      { id: '1', title: 'CSS', isDone: false },
-      { id: '2', title: 'JS', isDone: true },
-      { id: '3', title: 'React', isDone: true },
+      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
     ],
     todoListID2: [
-      { id: '1', title: 'Babel', isDone: false },
-      { id: '2', title: 'Webpack', isDone: true },
-      { id: '3', title: 'Gulp', isDone: true },
+      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
     ],
   }
 

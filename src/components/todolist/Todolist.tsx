@@ -5,9 +5,10 @@ import { useDispatch } from 'react-redux'
 import { AddItemForm } from '../addItemForm/AddItemForm'
 import { EditableTitle } from '../editableTitle/EditableTitle'
 import { Task } from './task/Task'
-import { addTaskAC, TaskType } from './task/TaskReducer'
+import { addTaskAC } from './task/TaskReducer'
 import s from './Todolist.module.scss'
 import { changeTodolistTitleAC, removeTodolistAC, tasksFilterValueAC } from './TodolistReducer'
+import { TaskStatuses, TaskType } from './Todolist-api'
 
 type TodolistType = {
   todolistID: string
@@ -22,11 +23,11 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
   let filteredTasks = tasks
 
   if (filterValue === 'active') {
-    filteredTasks = filteredTasks.filter(taskElement => taskElement.isDone === false)
+    filteredTasks = filteredTasks.filter(taskElement => taskElement.status === TaskStatuses.New)
   }
 
   if (filterValue === 'completed') {
-    filteredTasks = filteredTasks.filter(taskElement => taskElement.isDone === true)
+    filteredTasks = filteredTasks.filter(taskElement => taskElement.status === TaskStatuses.Completed)
   }
 
   const tasksData = filteredTasks.map(taskElement => {
@@ -35,7 +36,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
         key={taskElement.id}
         taskID={taskElement.id}
         taskTitle={taskElement.title}
-        isChecked={taskElement.isDone}
+        status={taskElement.status}
         todolistID={todolistID}
       />
     )

@@ -5,17 +5,19 @@ import { removeTaskAC, changeTaskStatusAC, changeTaskTitleAC } from './TaskReduc
 import s from '../Todolist.module.scss'
 import { Checkbox, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
+import { TaskStatuses } from '../Todolist-api'
 
 type TaskType = {
   taskID: string
   taskTitle: string
-  isChecked: boolean
+  status: TaskStatuses
   todolistID: string
 }
 
-export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, isChecked, todolistID }) => {
+export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status, todolistID }) => {
   console.log('render TASK')
   const dispatch = useDispatch()
+  const isChecked = status === TaskStatuses.Completed
 
   const onClickButtonHandler = useCallback(() => {
     dispatch(removeTaskAC(todolistID, taskID))
