@@ -38,9 +38,7 @@ export type TaskType = {
 type TasksType = {
   error: string | null
   totalCount: number
-  items: {
-    item: Array<TaskType>
-  }
+  items: Array<TaskType>
 }
 
 type UpdateTaskModelType = {

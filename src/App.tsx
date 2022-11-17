@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v1 } from 'uuid'
 import { AddItemForm } from './components/addItemForm/AddItemForm'
@@ -6,9 +6,10 @@ import s from './App.module.scss'
 import { AppRootStateType } from './redux/store'
 import { TasksType } from './components/todolist/task/TaskReducer'
 import { Todolist } from './components/todolist/Todolist'
-import { addTodolistAC, TodolistDomainType } from './components/todolist/TodolistReducer'
+import { addTodolistAC, fetchTodolistsTC, setTodolistsAC, TodolistDomainType } from './components/todolist/TodolistReducer'
 import { AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { todolistAPI } from './components/todolist/Todolist-api'
 
 const App = () => {
   console.log('render APP')
@@ -31,6 +32,15 @@ const App = () => {
       </Grid>
     )
   })
+
+  useEffect(() => {
+    //  dispatch(() =>
+    //    todolistAPI.getTodolists().then(res => {
+    //      dispatch(setTodolistsAC(res.data))
+    //    })
+    //  )
+    dispatch(fetchTodolistsTC)
+  }, [])
 
   return (
     <div className={s.app}>

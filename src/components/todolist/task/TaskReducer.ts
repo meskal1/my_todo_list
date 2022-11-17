@@ -1,7 +1,7 @@
 import React from 'react'
 import { v1 } from 'uuid'
 import { TaskPriorities, TaskStatuses, TaskType } from '../Todolist-api'
-import { RemoveTodolistACType, AddTodolistACType } from '../TodolistReducer'
+import { RemoveTodolistACType, AddTodolistACType, SetTodolistsACType } from '../TodolistReducer'
 
 export type TasksType = {
   [key: string]: Array<TaskType>
@@ -16,6 +16,7 @@ type ActionType =
   | ChangeTaskTitleACType
   | RemoveTodolistACType
   | AddTodolistACType
+  | SetTodolistsACType
 
 export const taskReducer = (state: TasksType = initialState, action: ActionType): TasksType => {
   switch (action.type) {
@@ -68,6 +69,13 @@ export const taskReducer = (state: TasksType = initialState, action: ActionType)
     }
     case 'ADD_TODOLIST': {
       return { ...state, [action.payload.todolistID]: [] }
+    }
+    case 'SET_TODOLISTS': {
+      const stateCopy = { ...state }
+      action.payload.todolists.forEach(tl => {
+        stateCopy[tl.id] = []
+      })
+      return stateCopy
     }
     default:
       return state

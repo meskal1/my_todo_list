@@ -1,6 +1,7 @@
-import { addTodolistAC, removeTodolistAC } from '../TodolistReducer'
+import { addTodolistAC, removeTodolistAC, setTodolistsAC } from '../TodolistReducer'
 import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer, TasksType } from './TaskReducer'
 import { TaskPriorities, TaskStatuses } from '../Todolist-api'
+import { startState as todolists, todolistID1, todolistID2 } from '../TodolistReducer.test'
 
 const restProps = {
   description: '',
@@ -10,21 +11,20 @@ const restProps = {
   deadline: '',
   addedDate: '',
 }
+const startState: TasksType = {
+  todoListID1: [
+    { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+    { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+    { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+  ],
+  todoListID2: [
+    { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
+    { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+    { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+  ],
+}
 
 test('case should remove task in correct todolist', () => {
-  const startState: TasksType = {
-    todoListID1: [
-      { id: '1', title: 'Title1', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-      { id: '2', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-      { id: '3', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    ],
-    todoListID2: [
-      { id: '1', title: 'Title1', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-      { id: '2', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-      { id: '3', title: 'Title2', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    ],
-  }
-
   const action = removeTaskAC('todoListID1', startState.todoListID1[0].id)
 
   const endState: TasksType = taskReducer(startState, action)
@@ -36,19 +36,6 @@ test('case should remove task in correct todolist', () => {
 
 test('case should add task in correct todolist', () => {
   const taskTitle = 'TypeScript'
-
-  const startState: TasksType = {
-    todoListID1: [
-      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    ],
-    todoListID2: [
-      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    ],
-  }
 
   const action = addTaskAC('todoListID2', taskTitle)
 
@@ -62,19 +49,6 @@ test('case should add task in correct todolist', () => {
 })
 
 test('status of specified task should changed', () => {
-  const startState: TasksType = {
-    todoListID1: [
-      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    ],
-    todoListID2: [
-      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    ],
-  }
-
   const action = changeTaskStatusAC('todoListID2', '3', false)
 
   const endState: TasksType = taskReducer(startState, action)
@@ -85,19 +59,6 @@ test('status of specified task should changed', () => {
 
 test('title of specified task should changed', () => {
   const newTitle = 'Scrum'
-
-  const startState: TasksType = {
-    todoListID1: [
-      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    ],
-    todoListID2: [
-      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    ],
-  }
 
   const action = changeTaskTitleAC('todoListID2', '3', newTitle)
 
@@ -129,19 +90,6 @@ test('empty array of tasks should be added when new todolist added', () => {
 })
 
 test('array of tasks should be deleted when todolist deleted', () => {
-  const startState: TasksType = {
-    todoListID1: [
-      { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-      { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-      { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    ],
-    todoListID2: [
-      { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-      { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-      { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    ],
-  }
-
   const action = removeTodolistAC('todoListID1')
 
   const endState: TasksType = taskReducer(startState, action)
@@ -150,4 +98,16 @@ test('array of tasks should be deleted when todolist deleted', () => {
 
   expect(keys.length).toBe(1)
   expect(keys[0]).toBe('todoListID2')
+})
+
+test('tasks should be added to the state when we set todolists', () => {
+  const action = setTodolistsAC(todolists)
+
+  const endState: TasksType = taskReducer({}, action)
+
+  const keys = Object.keys(endState)
+
+  expect(keys.length).toBe(2)
+  expect(endState[todolistID1]).toStrictEqual([])
+  expect(endState[todolistID2]).toStrictEqual([])
 })
