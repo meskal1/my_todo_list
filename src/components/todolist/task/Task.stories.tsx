@@ -1,7 +1,7 @@
 import { ReduxStoreProviderDecorator } from '../../../stories/ReduxStoreProviderDecorator'
 import { Task } from './Task'
 import { useSelector } from 'react-redux'
-import { AppRootStateType } from '../../../redux/store'
+import { RootStateType } from '../../../redux/store'
 import { TasksType } from './TaskReducer'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
@@ -13,7 +13,7 @@ export default {
 } as ComponentMeta<typeof Task>
 
 const TaskIsDoneWithRedux = () => {
-  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
+  const tasks = useSelector<RootStateType, TasksType>(state => state.tasks)
   return (
     <Task
       taskID={tasks.todolistId1[0].id}
@@ -25,7 +25,7 @@ const TaskIsDoneWithRedux = () => {
 }
 
 const TaskIsNotDoneWithRedux = () => {
-  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
+  const tasks = useSelector<RootStateType, TasksType>(state => state.tasks)
   return (
     <Task
       taskID={tasks.todolistId1[1].id}

@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Delete } from '@mui/icons-material'
 import { Button, IconButton } from '@mui/material'
-import { useDispatch } from 'react-redux'
 import { AddItemForm } from '../addItemForm/AddItemForm'
 import { EditableTitle } from '../editableTitle/EditableTitle'
 import { Task } from './task/Task'
-import { addTaskAC } from './task/TaskReducer'
+import { addTaskAC, fetchTasksTC } from './task/TaskReducer'
 import s from './Todolist.module.scss'
 import { changeTodolistTitleAC, removeTodolistAC, tasksFilterValueAC } from './TodolistReducer'
 import { TaskStatuses, TaskType } from './Todolist-api'
+import { useAppDispatch } from '../../redux/hooks'
 
 type TodolistType = {
   todolistID: string
@@ -18,8 +18,8 @@ type TodolistType = {
 }
 
 export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks }) => {
-  console.log(`render TODOLIST ${todolistID}`)
-  const dispatch = useDispatch()
+  //   console.log(`render TODOLIST ${todolistID}`)
+  const dispatch = useAppDispatch()
   let filteredTasks = tasks
 
   if (filterValue === 'active') {
@@ -60,6 +60,18 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
 
   const onClickRemoveHandler = useCallback(() => {
     dispatch(removeTodolistAC(todolistID))
+  }, [])
+
+  //   const startState: any = {
+  //     todoListID1: [
+  //       { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1' },
+  //       { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1' },
+  //       { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1' },
+  //     ],
+  //   }
+  //   console.log(Object.keys(startState) + '')
+  useEffect(() => {
+    dispatch(fetchTasksTC(todolistID))
   }, [])
 
   return (

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
-import { useDispatch } from 'react-redux'
 import { EditableTitle } from '../../editableTitle/EditableTitle'
 import { removeTaskAC, changeTaskStatusAC, changeTaskTitleAC } from './TaskReducer'
 import s from '../Todolist.module.scss'
 import { Checkbox, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { TaskStatuses } from '../Todolist-api'
+import { useAppDispatch } from '../../../redux/hooks'
 
 type TaskType = {
   taskID: string
@@ -16,7 +16,7 @@ type TaskType = {
 
 export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status, todolistID }) => {
   console.log('render TASK')
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const isChecked = status === TaskStatuses.Completed
 
   const onClickButtonHandler = useCallback(() => {

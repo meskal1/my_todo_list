@@ -7,7 +7,7 @@ export type EditableTitleType = {
 }
 
 export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange }) => {
-  console.log('render EDITABLE_TITLE')
+  //   console.log('render EDITABLE_TITLE')
   const [editable, setEditable] = useState(false)
   const [titleValue, setTitleValue] = useState('')
 

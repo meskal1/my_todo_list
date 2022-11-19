@@ -4,7 +4,7 @@ import { v1 } from 'uuid'
 import { taskReducer } from '../components/todolist/task/TaskReducer'
 import { TaskPriorities, TaskStatuses } from '../components/todolist/Todolist-api'
 import { todolistReducer } from '../components/todolist/TodolistReducer'
-import { AppRootStateType } from '../redux/store'
+import { RootStateType } from '../redux/store'
 
 const rootReducer = combineReducers({
   todolists: todolistReducer,
@@ -72,7 +72,7 @@ const initialGlobalState = {
   },
 }
 
-export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as AppRootStateType)
+export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as RootStateType)
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {
   return <Provider store={storyBookStore}>{storyFn()}</Provider>

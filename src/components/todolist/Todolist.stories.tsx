@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { AppRootStateType } from '../../redux/store'
+import { RootStateType } from '../../redux/store'
 import { ReduxStoreProviderDecorator } from '../../stories/ReduxStoreProviderDecorator'
 import { Todolist } from './Todolist'
 import { TasksType } from './task/TaskReducer'
@@ -14,8 +14,8 @@ export default {
 } as ComponentMeta<typeof Todolist>
 
 const TodolistWithRedux = () => {
-  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
-  const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
+  const todolists = useSelector<RootStateType, Array<TodolistDomainType>>(state => state.todolists)
+  const tasks = useSelector<RootStateType, TasksType>(state => state.tasks)
   return (
     <Todolist todolistID={todolists[0].id} tasks={tasks[todolists[0].id]} title={todolists[0].title} filterValue={todolists[0].filter} />
   )

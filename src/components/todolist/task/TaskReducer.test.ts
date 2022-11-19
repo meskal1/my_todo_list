@@ -1,7 +1,7 @@
 import { addTodolistAC, removeTodolistAC, setTodolistsAC } from '../TodolistReducer'
-import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer, TasksType } from './TaskReducer'
-import { TaskPriorities, TaskStatuses } from '../Todolist-api'
-import { startState as todolists, todolistID1, todolistID2 } from '../TodolistReducer.test'
+import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC, taskReducer, TasksType } from './TaskReducer'
+import { TaskPriorities, TaskStatuses, TaskType } from '../Todolist-api'
+import { startState as todolists, todolistID1 as todolistId1, todolistID2 as todolistId2 } from '../TodolistReducer.test'
 
 const restProps = {
   description: '',
@@ -108,6 +108,21 @@ test('tasks should be added to the state when we set todolists', () => {
   const keys = Object.keys(endState)
 
   expect(keys.length).toBe(2)
-  expect(endState[todolistID1]).toStrictEqual([])
-  expect(endState[todolistID2]).toStrictEqual([])
+  expect(endState[todolistId1]).toStrictEqual([])
+  expect(endState[todolistId2]).toStrictEqual([])
+})
+
+test('tasks should be added for todolist when we set tasks', () => { 
+  const tasks: Array<TaskType> = [
+    { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
+    { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+    { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+  ]
+
+  const action = setTasksAC('todoListID1', tasks)
+
+  const endState: TasksType = taskReducer({ todoListID1: [], todoListID2: [] }, action)
+
+  expect(endState['todoListID1'].length).toBe(3)
+  expect(endState['todoListID2'].length).toBe(0)
 })

@@ -69,8 +69,8 @@ export const GetTasks = () => {
 export const CreateTask = () => {
   const [state, setState] = useState<any>(null)
   useEffect(() => {
-    const todolistID = '3ffe6c35-7670-4aef-bba4-3195dc5a0100'
-    const title = '123'
+    const todolistID = 'cc7b3db2-e178-4877-8f99-c1af5374f64f'
+    const title = '123456'
     todolistAPI.createTask(todolistID, title).then(res => {
       // debugger
       setState(res.data)

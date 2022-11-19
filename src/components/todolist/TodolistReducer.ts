@@ -1,7 +1,5 @@
 import React from 'react'
-// import { store } from '../../redux/store'
-import { AnyAction, Dispatch } from 'redux'
-// import type { Dispatch } from 'redux-thunk/extend-redux'
+import { Dispatch } from 'redux'
 import { todolistAPI, TodolistType } from './Todolist-api'
 
 type FilterValuesType = 'all' | 'active' | 'completed'
@@ -99,16 +97,8 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) => {
   } as const
 }
 
-// type Dispatch = typeof store.dispatch
-
-// export const fetchTodolistsTC = (dispatch: Dispatch) => {
-//   todolistAPI.getTodolists().then(res => {
-//     dispatch(setTodolistsAC(res.data))
-//   })
-// }
-
 export const fetchTodolistsTC = () => {
-  return (dispatch: Dispatch<any | AnyAction>): any => {
+  return (dispatch: Dispatch) => {
     todolistAPI.getTodolists().then(res => {
       dispatch(setTodolistsAC(res.data))
     })
