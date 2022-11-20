@@ -1,7 +1,7 @@
 import React from 'react'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { TodolistType } from './Todolist-api'
+import { TodolistType } from '../../api/Todolist-api'
 
 type FilterValuesType = 'all' | 'active' | 'completed'
 

@@ -2,7 +2,7 @@ import { Provider } from 'react-redux'
 import { combineReducers, legacy_createStore } from 'redux'
 import { v1 } from 'uuid'
 import { taskReducer } from '../components/todolist/task/TaskReducer'
-import { TaskPriorities, TaskStatuses } from '../components/todolist/Todolist-api'
+import { TaskPriorities, TaskStatuses } from '../api/Todolist-api'
 import { todolistReducer } from '../components/todolist/TodolistReducer'
 import { RootStateType } from '../redux/store'
 

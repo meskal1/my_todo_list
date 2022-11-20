@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent, useCallback } from 'react'
+import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
 import s from '../todolist/Todolist.module.scss'
 import { IconButton, TextField } from '@mui/material'
 import { ControlPoint } from '@mui/icons-material'
@@ -8,7 +8,7 @@ export type AddItemFormType = {
 }
 
 export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem }) => {
-  console.log('render ADD_INPUT')
+  //   console.log('render ADD_INPUT')
   const [error, setError] = useState<string>('')
   const [inputValue, setInputValue] = useState('')
 
@@ -17,7 +17,7 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem }) =
     setInputValue(e.currentTarget.value)
   }
 
-  const onClickAddTaskHandler = () => {
+  const onClickCreateTask = () => {
     if (inputValue.trim().length !== 0) {
       addItem(inputValue.trim())
       setInputValue('')
@@ -26,9 +26,9 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem }) =
     }
   }
 
-  const onKeyDownAddTaskHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDownCreateTask = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onClickAddTaskHandler()
+      onClickCreateTask()
     }
   }
 
@@ -41,9 +41,9 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem }) =
           helperText={error}
           value={inputValue}
           onChange={onChangeInputHandler}
-          onKeyPress={onKeyDownAddTaskHandler}
+          onKeyPress={onKeyDownCreateTask}
         />
-        <IconButton onClick={onClickAddTaskHandler}>
+        <IconButton onClick={onClickCreateTask}>
           <ControlPoint />
         </IconButton>
       </div>

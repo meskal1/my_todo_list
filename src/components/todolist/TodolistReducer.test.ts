@@ -1,8 +1,8 @@
 import { v1 } from 'uuid'
 import {
-  addTodolistAC,
-  changeTodolistTitleAC,
-  removeTodolistAC,
+  createTodolistAC,
+  updateTodolistTitleAC,
+  deleteTodolistAC,
   setTodolistsAC,
   tasksFilterValueAC,
   TodolistDomainType,
@@ -17,7 +17,7 @@ export const startState: Array<TodolistDomainType> = [
 ]
 
 test('case should remove todolist', () => {
-  const action = removeTodolistAC(todolistID1)
+  const action = deleteTodolistAC(todolistID1)
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -26,23 +26,21 @@ test('case should remove todolist', () => {
 })
 
 test('case should add todolist', () => {
-  const startState: Array<TodolistDomainType> = [{ id: todolistID2, title: 'Title2', filter: 'all', addedDate: '', order: 0 }]
+  const todolist: TodolistDomainType = { id: 'todolistID3', title: 'Title2', filter: 'all', addedDate: '', order: 0 }
 
-  const titleTodoList = 'Buy a book'
-
-  const action = addTodolistAC(todolistID1, titleTodoList)
+  const action = createTodolistAC(todolist)
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
-  expect(endState.length).toBe(2)
-  expect(endState[0].id).toBe(todolistID1)
+  expect(endState.length).toBe(3)
+  expect(endState[0].id).toBe('todolistID3')
   expect(endState[0].filter).toBe('all')
 })
 
 test('case should change todolist title', () => {
   const newTitleTodoList = 'Buy a milk'
 
-  const action = changeTodolistTitleAC(todolistID2, newTitleTodoList)
+  const action = updateTodolistTitleAC(todolistID2, newTitleTodoList)
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
