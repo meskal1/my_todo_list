@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dispatch } from 'redux'
 import { todolistAPI, TodolistType } from '../../api/Todolist-api'
+import { RequestStatusType, setAppErrorAC, setAppStatusAC } from '../../app/AppReducer'
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -18,7 +19,17 @@ export const todolistReducer = (
       return state.filter(todolist => todolist.id !== action.payload.todolistID)
     }
     case 'CREATE_TODOLIST': {
-      return [{ id: action.payload.todolist.id, title: action.payload.todolist.title, addedDate: '', order: 0, filter: 'all' }, ...state]
+      return [
+        {
+          id: action.payload.todolist.id,
+          title: action.payload.todolist.title,
+          addedDate: '',
+          order: 0,
+          filter: 'all',
+          entityStatus: 'idle',
+        },
+        ...state,
+      ]
     }
     case 'UPDATE_TODOLIST_TITLE': {
       return state.map(todolist =>
@@ -26,7 +37,12 @@ export const todolistReducer = (
       )
     }
     case 'SET_TODOLISTS': {
-      return action.payload.todolists.map(obj => ({ ...obj, filter: 'all' }))
+      return action.payload.todolists.map(obj => ({ ...obj, filter: 'all', entityStatus: 'idle' }))
+    }
+    case 'SET_TODOLIST_ENTITY_STATUS': {
+      return state.map(todolist =>
+        todolist.id === action.payload.todolistID ? { ...todolist, entityStatus: action.payload.entityStatus } : todolist
+      )
     }
     default:
       return state
@@ -81,35 +97,63 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) => {
   } as const
 }
 
+export const setTodolistEntityStatusAC = (todolistID: string, entityStatus: RequestStatusType) => {
+  return {
+    type: 'SET_TODOLIST_ENTITY_STATUS',
+    payload: {
+      todolistID,
+      entityStatus,
+    },
+  } as const
+}
+
 // THUNKS
 export const fetchTodolistsTC = () => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     todolistAPI.getTodolists().then(res => {
       dispatch(setTodolistsAC(res.data))
+      dispatch(setAppStatusAC('succeeded'))
     })
   }
 }
 
 export const deleteTodolistTC = (todolistID: string) => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
+    dispatch(setTodolistEntityStatusAC(todolistID, 'loading'))
     todolistAPI.deleteTodolist(todolistID).then(() => {
       dispatch(deleteTodolistAC(todolistID))
+      dispatch(setAppStatusAC('succeeded'))
     })
   }
 }
 
 export const createTodolistTC = (todolistTitle: string) => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     todolistAPI.createTodolist(todolistTitle).then(res => {
-      dispatch(createTodolistAC(res.data.data.item))
+      if (res.data.resultCode === 0) {
+        dispatch(createTodolistAC(res.data.data.item))
+        dispatch(setAppStatusAC('succeeded'))
+      } else {
+        if (res.data.messages.length) {
+          dispatch(setAppErrorAC(res.data.messages[0]))
+        } else {
+          dispatch(setAppErrorAC('Some error occurred'))
+        }
+        dispatch(setAppStatusAC('failed'))
+      }
     })
   }
 }
 
 export const updateTodolistTitleTC = (todolistID: string, todolistTitle: string) => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     todolistAPI.updateTodolistTitle(todolistID, todolistTitle).then(() => {
       dispatch(updateTodolistTitleAC(todolistID, todolistTitle))
+      dispatch(setAppStatusAC('succeeded'))
     })
   }
 }
@@ -117,7 +161,7 @@ export const updateTodolistTitleTC = (todolistID: string, todolistTitle: string)
 // TYPES
 type FilterValuesType = 'all' | 'active' | 'completed'
 
-export type TodolistDomainType = TodolistType & { filter: string }
+export type TodolistDomainType = TodolistType & { filter: FilterValuesType; entityStatus: RequestStatusType }
 
 type TodolistReducerType =
   | TasksFilterValueACType
@@ -125,6 +169,7 @@ type TodolistReducerType =
   | CreateTodolistACType
   | UpdateTodolistTitleACType
   | SetTodolistsACType
+  | SetTodolistEntityStatusACType
 
 type TasksFilterValueACType = ReturnType<typeof tasksFilterValueAC>
 
@@ -135,3 +180,5 @@ export type CreateTodolistACType = ReturnType<typeof createTodolistAC>
 type UpdateTodolistTitleACType = ReturnType<typeof updateTodolistTitleAC>
 
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
+
+export type SetTodolistEntityStatusACType = ReturnType<typeof setTodolistEntityStatusAC>

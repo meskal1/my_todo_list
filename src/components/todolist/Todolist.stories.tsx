@@ -17,7 +17,13 @@ const TodolistWithRedux = () => {
   const todolists = useSelector<RootStateType, Array<TodolistDomainType>>(state => state.todolists)
   const tasks = useSelector<RootStateType, TasksType>(state => state.tasks)
   return (
-    <Todolist todolistID={todolists[0].id} tasks={tasks[todolists[0].id]} title={todolists[0].title} filterValue={todolists[0].filter} />
+    <Todolist
+      todolistID={todolists[0].id}
+      tasks={tasks[todolists[0].id]}
+      title={todolists[0].title}
+      filterValue={todolists[0].filter}
+      entityStatus={todolists[0].entityStatus}
+    />
   )
 }
 

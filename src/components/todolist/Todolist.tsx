@@ -6,18 +6,20 @@ import { EditableTitle } from '../editableTitle/EditableTitle'
 import { Task } from './task/Task'
 import { createTaskTC, fetchTasksTC } from './task/TaskReducer'
 import s from './Todolist.module.scss'
-import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC } from './TodolistReducer'
+import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC, setTodolistEntityStatusAC } from './TodolistReducer'
 import { TaskStatuses, TaskType } from '../../api/Todolist-api'
 import { useAppDispatch } from '../../redux/hooks'
+import { RequestStatusType } from '../../app/AppReducer'
 
 type TodolistType = {
   todolistID: string
   title: string
   filterValue: string
   tasks: Array<TaskType>
+  entityStatus: RequestStatusType
 }
 
-export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks }) => {
+export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus }) => {
   //   console.log(`render TODOLIST ${todolistID}`)
   const dispatch = useAppDispatch()
   let filteredTasks = tasks
@@ -67,7 +69,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
 
   const onClickDelete = useCallback(() => {
     dispatch(deleteTodolistTC(todolistID))
-  }, [])
+  }, [entityStatus])
 
   useEffect(() => {
     dispatch(fetchTasksTC(todolistID))
@@ -80,7 +82,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
           <h3>
             <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} />
           </h3>
-          <IconButton onClick={onClickDelete}>
+          <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'}>
             <Delete />
           </IconButton>
         </div>

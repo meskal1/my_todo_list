@@ -12,8 +12,8 @@ import {
 export const todolistID1 = v1()
 export const todolistID2 = v1()
 export const startState: Array<TodolistDomainType> = [
-  { id: todolistID2, title: 'Title2', filter: 'all', addedDate: '', order: 0 },
-  { id: todolistID1, title: 'Buy a book', filter: 'active', addedDate: '', order: 0 },
+  { id: todolistID2, title: 'Title2', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle' },
+  { id: todolistID1, title: 'Buy a book', filter: 'active', addedDate: '', order: 0, entityStatus: 'idle' },
 ]
 
 test('case should remove todolist', () => {
@@ -26,7 +26,14 @@ test('case should remove todolist', () => {
 })
 
 test('case should add todolist', () => {
-  const todolist: TodolistDomainType = { id: 'todolistID3', title: 'Title2', filter: 'all', addedDate: '', order: 0 }
+  const todolist: TodolistDomainType = {
+    id: 'todolistID3',
+    title: 'Title2',
+    filter: 'all',
+    addedDate: '',
+    order: 0,
+    entityStatus: 'idle',
+  }
 
   const action = createTodolistAC(todolist)
 
