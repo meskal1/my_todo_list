@@ -9,7 +9,11 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
 
-const App = () => {
+type AppType = {
+  demo?: boolean
+}
+
+const App: React.FC<AppType> = ({ demo = false }) => {
   //   console.log('render APP')
   const dispatch = useAppDispatch()
   const todolistsData = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
@@ -31,6 +35,7 @@ const App = () => {
             title={todolist.title}
             filterValue={todolist.filter}
             entityStatus={todolist.entityStatus}
+            demo={demo}
           />
         </Paper>
       </Grid>
@@ -38,7 +43,9 @@ const App = () => {
   })
 
   useEffect(() => {
-    dispatch(fetchTodolistsTC())
+    if (!demo) {
+      dispatch(fetchTodolistsTC())
+    }
   }, [])
 
   return (

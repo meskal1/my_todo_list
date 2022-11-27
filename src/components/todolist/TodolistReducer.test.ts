@@ -7,6 +7,7 @@ import {
   tasksFilterValueAC,
   TodolistDomainType,
   todolistReducer,
+  setTodolistEntityStatusAC,
 } from './TodolistReducer'
 
 export const todolistID1 = v1()
@@ -70,4 +71,13 @@ test('todolists should be set to the state', () => {
   const endState: Array<TodolistDomainType> = todolistReducer([], action)
 
   expect(endState.length).toBe(2)
+})
+
+test('correct entity status of todolist should be changed', () => {
+  const action = setTodolistEntityStatusAC(todolistID1, 'loading')
+
+  const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
+
+  expect(endState[1].entityStatus).toBe('loading')
+  expect(endState[0].entityStatus).toBe('idle')
 })

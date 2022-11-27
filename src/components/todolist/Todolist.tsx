@@ -17,9 +17,10 @@ type TodolistType = {
   filterValue: string
   tasks: Array<TaskType>
   entityStatus: RequestStatusType
+  demo?: boolean
 }
 
-export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus }) => {
+export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus, demo = false }) => {
   //   console.log(`render TODOLIST ${todolistID}`)
   const dispatch = useAppDispatch()
   let filteredTasks = tasks
@@ -72,7 +73,9 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
   }, [entityStatus])
 
   useEffect(() => {
-    dispatch(fetchTasksTC(todolistID))
+    if (!demo) {
+      dispatch(fetchTasksTC(todolistID))
+    }
   }, [])
 
   return (
@@ -86,7 +89,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
             <Delete />
           </IconButton>
         </div>
-        <AddItemForm addItem={onClickCreateTask} />
+        <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} />
         <ul>{tasksData}</ul>
         <div>
           <Button variant={filterValue === 'all' ? 'contained' : 'text'} onClick={onAllClick}>
