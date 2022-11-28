@@ -12,8 +12,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 export const CustomizedSnackbars = () => {
   const dispatch = useAppDispatch()
   const error = useAppSelector(state => state.app.error)
-  const isOpen = !!error
-  //   const open = error !== null
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -25,9 +23,8 @@ export const CustomizedSnackbars = () => {
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
-      <Snackbar open={isOpen} autoHideDuration={5000} onClose={handleClose}>
+      <Snackbar open={!!error} autoHideDuration={4000} onClose={handleClose}>
         <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
-          Error loading data...
           {error}
         </Alert>
       </Snackbar>

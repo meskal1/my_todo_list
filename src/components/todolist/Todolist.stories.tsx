@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { RootStateType } from '../../redux/store'
-import { ReduxStoreProviderDecorator } from '../../stories/ReduxStoreProviderDecorator'
+import { ReduxStoreProviderDecorator } from '../../redux/ReduxStoreProviderDecorator'
 import { Todolist } from './Todolist'
 import { TasksType } from './task/TaskReducer'
 import { TodolistDomainType } from './TodolistReducer'

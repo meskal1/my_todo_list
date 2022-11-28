@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { ReduxStoreProviderDecorator } from '../../stories/ReduxStoreProviderDecorator'
+import { ReduxStoreProviderDecorator } from '../../redux/ReduxStoreProviderDecorator'
 import { EditableTitle } from './EditableTitle'
 import { action } from '@storybook/addon-actions'
 

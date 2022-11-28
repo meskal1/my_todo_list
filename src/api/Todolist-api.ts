@@ -36,14 +36,7 @@ export const todolistAPI = {
   },
 }
 
-// TYPES
-export type TodolistType = {
-  id: string
-  title: string
-  addedDate: string
-  order: number
-}
-
+// ENUMS
 export enum TaskStatuses {
   New = 0,
   InProgress = 1,
@@ -57,6 +50,20 @@ export enum TaskPriorities {
   Hi = 2,
   Urgently = 3,
   Later = 4,
+}
+
+export enum ResultCode {
+  Ok = 0,
+  Error = 1,
+  Captcha = 10,
+}
+
+// TYPES
+export type TodolistType = {
+  id: string
+  title: string
+  addedDate: string
+  order: number
 }
 
 export type TaskType = {

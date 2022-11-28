@@ -1,9 +1,11 @@
 import React from 'react'
-import { TaskPriorities, TaskStatuses, TaskType, todolistAPI } from '../../../api/Todolist-api'
+import { TaskPriorities, TaskStatuses, TaskType, todolistAPI, ResultCode } from '../../../api/Todolist-api'
 import { DeleteTodolistACType, CreateTodolistACType, SetTodolistsACType } from '../TodolistReducer'
 import { Dispatch } from 'redux'
 import { RootStateType } from '../../../redux/store'
 import { setAppErrorAC, setAppStatusAC } from '../../../app/AppReducer'
+import axios, { AxiosError } from 'axios'
+import { handleServerAppError } from '../../../utils/ErrorUtils'
 
 const initialState: TasksType = {}
 
@@ -94,51 +96,50 @@ export const setTasksAC = (todolistID: string, tasks: Array<TaskType>) => {
 }
 
 // THUNKS
-export const fetchTasksTC = (todolistID: string) => {
-  return (dispatch: Dispatch) => {
+export const fetchTasksTC = (todolistID: string) => async (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC('loading'))
+  const response = await todolistAPI.getTasks(todolistID)
+  dispatch(setTasksAC(todolistID, response.data.items))
+  dispatch(setAppStatusAC('succeeded'))
+}
+
+export const deleteTaskTC = (todolistID: string, taskID: string) => async (dispatch: Dispatch) => {
+  try {
     dispatch(setAppStatusAC('loading'))
-    todolistAPI.getTasks(todolistID).then(res => {
-      dispatch(setTasksAC(todolistID, res.data.items))
-      dispatch(setAppStatusAC('succeeded'))
-    })
+    await todolistAPI.deleteTask(todolistID, taskID)
+    dispatch(deleteTaskAC(todolistID, taskID))
+    dispatch(setAppStatusAC('succeeded'))
+  } catch (e) {
+    const err = e as Error | AxiosError
+    if (axios.isAxiosError(err)) {
+      const error = err.response?.data ? (err.response.data as { error: 'string' }).error : err.message
+      dispatch(setAppErrorAC(error))
+    }
+    dispatch(setAppStatusAC('failed'))
   }
 }
 
-export const deleteTaskTC = (todolistID: string, taskID: string) => {
-  return (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
-    todolistAPI.deleteTask(todolistID, taskID).then(() => {
-      dispatch(deleteTaskAC(todolistID, taskID))
-      dispatch(setAppStatusAC('succeeded'))
-    })
-  }
-}
-
-export const createTaskTC = (todolistID: string, taskTitle: string) => {
-  return (dispatch: Dispatch) => {
-    console.log('1')
-    dispatch(setAppStatusAC('loading'))
-    todolistAPI
-      .createTask(todolistID, taskTitle)
-      .then(res => {
-        console.log('2')
-        if (res.data.resultCode === 0) {
-          console.log('3')
-          dispatch(createTaskAC(res.data.data.item))
-          dispatch(setAppStatusAC('succeeded'))
-        } else {
-          ///////////////////////////////////////////////
-          console.log('4')
+export const createTaskTC = (todolistID: string, taskTitle: string) => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC('loading'))
+  todolistAPI
+    .createTask(todolistID, taskTitle)
+    .then(res => {
+      if (res.data.resultCode === ResultCode.Ok) {
+        dispatch(createTaskAC(res.data.data.item))
+        dispatch(setAppStatusAC('succeeded'))
+      } else {
+        if (res.data.messages.length) {
           dispatch(setAppErrorAC(res.data.messages[0]))
-          //  handleServerAppError(res.data, dispatch)
+        } else {
+          handleServerAppError<{ item: TaskType }>(dispatch, res.data)
         }
-      })
-      .catch(error => {
-        console.log('5')
-        dispatch(setAppStatusAC('failed'))
-        dispatch(setAppErrorAC(error.message))
-      })
-  }
+      }
+    })
+    .catch((e: AxiosError) => {
+      const error = e.response ? (e.response.data as { error: 'string' }).error : e.message
+      dispatch(setAppErrorAC(error))
+      dispatch(setAppStatusAC('failed'))
+    })
 }
 
 export const updateTaskTC = (todolistID: string, taskID: string, domainModel: UpdateDomainTaskModelType) => {
