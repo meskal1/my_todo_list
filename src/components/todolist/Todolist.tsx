@@ -4,10 +4,10 @@ import { Button, IconButton } from '@mui/material'
 import { AddItemForm } from '../addItemForm/AddItemForm'
 import { EditableTitle } from '../editableTitle/EditableTitle'
 import { Task } from './task/Task'
-import { createTaskTC, fetchTasksTC } from './task/TaskReducer'
+import { createTaskTC, fetchTasksTC, TaskExtendedType } from './task/TaskReducer'
 import s from './Todolist.module.scss'
-import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC, setTodolistEntityStatusAC } from './TodolistReducer'
-import { TaskStatuses, TaskType } from '../../api/Todolist-api'
+import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC } from './TodolistReducer'
+import { TaskStatuses } from '../../api/Todolist-api'
 import { useAppDispatch } from '../../redux/hooks'
 import { RequestStatusType } from '../../app/AppReducer'
 
@@ -15,7 +15,7 @@ type TodolistType = {
   todolistID: string
   title: string
   filterValue: string
-  tasks: Array<TaskType>
+  tasks: TaskExtendedType
   entityStatus: RequestStatusType
   demo?: boolean
 }
@@ -40,6 +40,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
         taskID={taskElement.id}
         taskTitle={taskElement.title}
         status={taskElement.status}
+        entityStatus={taskElement.entityStatus}
         todolistID={todolistID}
       />
     )
@@ -70,7 +71,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
 
   const onClickDelete = useCallback(() => {
     dispatch(deleteTodolistTC(todolistID))
-  }, [entityStatus])
+  }, [])
 
   useEffect(() => {
     if (!demo) {
@@ -83,7 +84,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
       <div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <h3>
-            <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} />
+            <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} entityStatus={entityStatus} />
           </h3>
           <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'}>
             <Delete />

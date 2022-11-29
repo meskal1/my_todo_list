@@ -6,15 +6,17 @@ import { Checkbox, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { TaskStatuses } from '../../../api/Todolist-api'
 import { useAppDispatch } from '../../../redux/hooks'
+import { RequestStatusType } from '../../../app/AppReducer'
 
 type TaskType = {
   taskID: string
   taskTitle: string
   status: TaskStatuses
   todolistID: string
+  entityStatus: RequestStatusType
 }
 
-export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status, todolistID }) => {
+export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status, todolistID, entityStatus }) => {
   console.log('render TASK')
   const dispatch = useAppDispatch()
   const isChecked = status === TaskStatuses.Completed
@@ -34,9 +36,9 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
   return (
     <>
       <li className={isChecked ? s.completed : ''}>
-        <Checkbox checked={isChecked} onChange={onChangeInput} />
-        <EditableTitle itemTitle={taskTitle} onChange={onChangeTaskTitle} />
-        <IconButton onClick={onClickButton}>
+        <Checkbox checked={isChecked} onChange={onChangeInput} disabled={entityStatus === 'loading'} />
+        <EditableTitle itemTitle={taskTitle} onChange={onChangeTaskTitle} entityStatus={entityStatus} />
+        <IconButton onClick={onClickButton} disabled={entityStatus === 'loading'}>
           <Delete />
         </IconButton>
       </li>

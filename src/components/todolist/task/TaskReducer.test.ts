@@ -1,5 +1,14 @@
 import { createTodolistAC, deleteTodolistAC, setTodolistsAC } from '../TodolistReducer'
-import { createTaskAC, deleteTaskAC, setTasksAC, taskReducer, TasksType, updateTaskAC } from './TaskReducer'
+import {
+  createTaskAC,
+  deleteTaskAC,
+  setTaskEntityStatusAC,
+  setTasksAC,
+  TaskExtendedType,
+  taskReducer,
+  TasksType,
+  updateTaskAC,
+} from './TaskReducer'
 import { TaskPriorities, TaskStatuses, TaskType } from '../../../api/Todolist-api'
 import { startState as todolists, todolistID1 as todolistId1, todolistID2 as todolistId2 } from '../TodolistReducer.test'
 
@@ -13,14 +22,14 @@ const restProps = {
 }
 const startState: TasksType = {
   todoListID1: [
-    { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps },
-    { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
-    { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', ...restProps },
+    { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
+    { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
+    { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
   ],
   todoListID2: [
-    { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', ...restProps },
-    { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
-    { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', ...restProps },
+    { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
+    { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
+    { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
   ],
 }
 
@@ -107,7 +116,7 @@ test('tasks should be added to the state when we set todolists', () => {
 })
 
 test('tasks should be added for todolist when we set tasks', () => {
-  const tasks: Array<TaskType> = startState.todoListID1
+  const tasks: TaskExtendedType = startState.todoListID1
 
   const action = setTasksAC('todoListID1', tasks)
 
@@ -115,4 +124,13 @@ test('tasks should be added for todolist when we set tasks', () => {
 
   expect(endState.todoListID1.length).toBe(3)
   expect(endState.todoListID2.length).toBe(0)
+})
+
+test('entityStatus of specified task should changed', () => {
+  const action = setTaskEntityStatusAC('todoListID2', '3', 'loading')
+
+  const endState: TasksType = taskReducer(startState, action)
+
+  expect(endState.todoListID1[2].entityStatus).toBe('idle')
+  expect(endState.todoListID2[2].entityStatus).toBe('loading')
 })

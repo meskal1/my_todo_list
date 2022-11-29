@@ -1,19 +1,23 @@
-import { Input, TextField } from '@mui/material'
-import React, { ChangeEvent, useState, KeyboardEvent, useCallback } from 'react'
+import { TextField } from '@mui/material'
+import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
+import { RequestStatusType } from '../../app/AppReducer'
 
 export type EditableTitleType = {
   itemTitle: string
   onChange: (taskTitle: string) => void
+  entityStatus: RequestStatusType
 }
 
-export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange }) => {
+export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange, entityStatus }) => {
   //   console.log('render EDITABLE_TITLE')
   const [editable, setEditable] = useState(false)
   const [titleValue, setTitleValue] = useState('')
 
   const onDoubleClickSpan = () => {
-    setTitleValue(itemTitle)
-    setEditable(true)
+    if (entityStatus !== 'loading') {
+      setTitleValue(itemTitle)
+      setEditable(true)
+    }
   }
 
   const onBlurInput = () => {

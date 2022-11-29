@@ -32,6 +32,7 @@ const initialGlobalState = {
         startDate: '',
         deadline: '',
         addedDate: '',
+        entityStatus: 'succeeded',
       },
       {
         id: v1(),
@@ -44,6 +45,7 @@ const initialGlobalState = {
         startDate: '',
         deadline: '',
         addedDate: '',
+        entityStatus: 'succeeded',
       },
     ],
     todolistId2: [
@@ -58,6 +60,7 @@ const initialGlobalState = {
         startDate: '',
         deadline: '',
         addedDate: '',
+        entityStatus: 'succeeded',
       },
       {
         id: v1(),
@@ -70,6 +73,7 @@ const initialGlobalState = {
         startDate: '',
         deadline: '',
         addedDate: '',
+        entityStatus: 'succeeded',
       },
     ],
   },

@@ -22,26 +22,3 @@ export const AddItemFormExampleDisabled = TemplateDisabled.bind({})
 AddItemFormExampleDisabled.args = {
   addItem: action('Add Button or key "Enter" was pressed inside form'),
 }
-// const TaskIsNotDoneWithRedux = () => {
-// 	const tasks = useSelector<RootStateType, TasksType>(state => state.tasks)
-// 	return (
-// 	  <Task
-// 		 taskID={tasks.todolistId1[1].id}
-// 		 taskTitle={tasks.todolistId1[1].title}
-// 		 status={tasks.todolistId1[1].status}
-// 		 todolistID={'todolistId1'}
-// 	  />
-// 	)
-//  }
-
-//  const TemplateIsDone: ComponentStory<typeof TaskIsDoneWithRedux> = () => <TaskIsDoneWithRedux />
-
-//  const TemplateNotDone: ComponentStory<typeof TaskIsNotDoneWithRedux> = () => <TaskIsNotDoneWithRedux />
-
-//  export const TaskIsDoneExample = TemplateIsDone.bind({})
-
-//  TaskIsDoneExample.args = {}
-
-//  export const TaskIsNotDoneExample = TemplateNotDone.bind({})
-
-//  TaskIsNotDoneExample.args = {}

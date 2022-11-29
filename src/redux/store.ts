@@ -31,7 +31,6 @@ export const store = configureStore({ reducer: rootReducer })
 
 // Автоматическая типизация state (всего приложения)
 export type RootStateType = ReturnType<typeof store.getState>
-// export type RootStateType = ReturnType<typeof rootReducer>
 // Типизация того, что мы можем отправлять в state
 export type AppDispatchType = typeof store.dispatch
 

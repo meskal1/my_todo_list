@@ -20,6 +20,7 @@ const TaskIsDoneWithRedux = () => {
       taskTitle={tasks.todolistId1[0].title}
       status={tasks.todolistId1[0].status}
       todolistID={'todolistId1'}
+      entityStatus={'succeeded'}
     />
   )
 }
@@ -32,6 +33,7 @@ const TaskIsNotDoneWithRedux = () => {
       taskTitle={tasks.todolistId1[1].title}
       status={tasks.todolistId1[1].status}
       todolistID={'todolistId1'}
+      entityStatus={'succeeded'}
     />
   )
 }
