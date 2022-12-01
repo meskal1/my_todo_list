@@ -1,8 +1,108 @@
 .app {
-  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
+  color: #98b5ff;
+  background: #031956;
+}
+.appBar {
   display: flex;
   flex-direction: column;
 }
-.app > div {
-  margin-right: 50px;
+.toolbar {
+  background: #344fa1;
+  display: flex;
+  justify-content: space-between;
+}
+.addInputForm {
+  width: 100%;
+}
+.addItemFormContainer {
+  display: flex;
+}
+.linearProgress {
+  position: absolute !important;
+  top: 60px;
+  width: 100%;
+}
+.todolistsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+//////TODOLIST////////
+.todolistContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  max-width: 280px;
+  border-radius: 35px;
+  background: #344fa1;
+  //   border: 1px solid white;
+}
+.todolistTitleBlock {
+  display: flex;
+  align-items: center;
+}
+.todolistTitle {
+  flex-basis: 100%;
+  //   align-self: center;
+  & > span {
+    text-align: center;
+  }
+}
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+}
+.blockButtons {
+}
+///////TASK//////
+.taskContainer {
+  display: flex;
+  align-items: center;
+  background: #031956;
+  border-radius: 18px;
+  padding: 5px 0;
+}
+.taskCheckbox,
+.taskButton {
+  align-self: flex-start;
+  //   color: red !important;
+}
+.taskButton {
+  color: #98b5ff !important;
+}
+.taskCheckbox {
+}
+
+//////////////
+.error {
+  border: red 1px solid;
+  outline: none;
+}
+.error_message {
+  color: red;
+}
+.active {
+  background: green;
+}
+.completed {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+///////////////
+
+.editableTitle {
+  width: 100%;
+  display: inline-block;
+  word-wrap: break-word;
+  word-break: break-all;
 }

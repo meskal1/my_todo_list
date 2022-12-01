@@ -1,14 +1,15 @@
 import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
-import s from '../todolist/Todolist.module.scss'
+import s from '../../app/App.module.scss'
 import { IconButton, TextField } from '@mui/material'
 import { ControlPoint } from '@mui/icons-material'
 
 export type AddItemFormType = {
   addItem: (itemTitle: string) => void
   isDisabled?: boolean
+  className?: string
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isDisabled }) => {
+export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isDisabled, className }) => {
   //   console.log('render ADD_INPUT')
   const [error, setError] = useState<string>('')
   const [inputValue, setInputValue] = useState('')
@@ -35,8 +36,10 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isD
 
   return (
     <>
-      <div>
+      <div className={s.addItemFormContainer}>
         <TextField
+          size='small'
+          className={`${className} ${s.addInputForm}`}
           disabled={isDisabled}
           error={!!error}
           label={'Type value'}

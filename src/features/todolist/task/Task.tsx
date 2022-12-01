@@ -1,9 +1,15 @@
 import React, { useCallback } from 'react'
-import { EditableTitle } from '../../editableTitle/EditableTitle'
+import { EditableTitle } from '../../../components/editableTitle/EditableTitle'
 import { updateTaskTC, deleteTaskTC } from './TaskReducer'
-import s from '../Todolist.module.scss'
+import s from '../../../app/App.module.scss'
 import { Checkbox, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
+// import DeleteIcon from '@material-ui/icons/Delete'
+// import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import DeleteIcon from '@mui/icons-material/Delete'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import { TaskStatuses } from '../../../api/Todolist-api'
 import { useAppDispatch } from '../../../redux/hooks'
 import { RequestStatusType } from '../../../app/AppReducer'
@@ -35,11 +41,20 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
 
   return (
     <>
-      <li className={isChecked ? s.completed : ''}>
-        <Checkbox checked={isChecked} onChange={onChangeInput} disabled={entityStatus === 'loading'} />
+      <li className={`${isChecked ? s.completed : ''} ${s.taskContainer}`}>
+        <Checkbox
+          className={s.taskCheckbox}
+          checked={isChecked}
+          onChange={onChangeInput}
+          disabled={entityStatus === 'loading'}
+          size='small'
+          style={isChecked ? { color: '#00ff26 ' } : { color: 'red ' }}
+          icon={<RadioButtonUncheckedIcon />}
+          checkedIcon={<TaskAltIcon />}
+        />
         <EditableTitle itemTitle={taskTitle} onChange={onChangeTaskTitle} entityStatus={entityStatus} />
-        <IconButton onClick={onClickButton} disabled={entityStatus === 'loading'}>
-          <Delete />
+        <IconButton className={s.taskButton} onClick={onClickButton} disabled={entityStatus === 'loading'}>
+          <DeleteIcon fontSize='small' />
         </IconButton>
       </li>
     </>

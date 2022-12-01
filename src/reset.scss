@@ -32,14 +32,12 @@ html,
 body {
   height: 100%;
   line-height: 1;
-  // background-color: #1c1d25;
   -webkit-tap-highlight-color: transparent;
   /* // При тапах убирает прямоугольники фоновые */
   -webkit-font-smoothing: antialiased;
 }
 html {
   /* по умолчанию */
-  font-size: rem(16);
+  font-size: 16px;
   color: black;
-  // font-family: "Montserrat";
 }

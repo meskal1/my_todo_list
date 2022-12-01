@@ -1,6 +1,7 @@
 import { TextField } from '@mui/material'
 import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
 import { RequestStatusType } from '../../app/AppReducer'
+import s from '../../app/App.module.scss'
 
 export type EditableTitleType = {
   itemTitle: string
@@ -39,6 +40,7 @@ export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitl
     <>
       {editable ? (
         <TextField
+          size='small'
           type='text'
           value={titleValue}
           onBlur={onBlurInput}
@@ -47,7 +49,9 @@ export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitl
           autoFocus
         />
       ) : (
-        <span onDoubleClick={onDoubleClickSpan}>{itemTitle}</span>
+        <span className={s.editableTitle} onDoubleClick={onDoubleClickSpan}>
+          {itemTitle}
+        </span>
       )}
     </>
   )

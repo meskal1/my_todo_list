@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect } from 'react'
 import { Delete } from '@mui/icons-material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { Button, IconButton } from '@mui/material'
-import { AddItemForm } from '../addItemForm/AddItemForm'
-import { EditableTitle } from '../editableTitle/EditableTitle'
 import { Task } from './task/Task'
 import { createTaskTC, fetchTasksTC, TaskExtendedType } from './task/TaskReducer'
-import s from './Todolist.module.scss'
+import s from '../../app/App.module.scss'
 import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC } from './TodolistReducer'
 import { TaskStatuses } from '../../api/Todolist-api'
 import { useAppDispatch } from '../../redux/hooks'
 import { RequestStatusType } from '../../app/AppReducer'
+import { AddItemForm } from '../../components/addItemForm/AddItemForm'
+import { EditableTitle } from '../../components/editableTitle/EditableTitle'
 
 type TodolistType = {
   todolistID: string
@@ -81,18 +82,18 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
 
   return (
     <>
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3>
+      <div className={s.todolistContainer}>
+        <div className={s.todolistTitleBlock}>
+          <h2 className={s.todolistTitle}>
             <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} entityStatus={entityStatus} />
-          </h3>
+          </h2>
           <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'}>
-            <Delete />
+            <DeleteIcon fontSize='small' />
           </IconButton>
         </div>
         <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} />
-        <ul>{tasksData}</ul>
-        <div>
+        <ul className={s.tasksList}>{tasksData}</ul>
+        <div className={s.blockButtons}>
           <Button variant={filterValue === 'all' ? 'contained' : 'text'} onClick={onAllClick}>
             All
           </Button>
