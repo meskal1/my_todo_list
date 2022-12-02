@@ -87,11 +87,11 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
           <h2 className={s.todolistTitle}>
             <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} entityStatus={entityStatus} />
           </h2>
-          <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'}>
+          <IconButton className={s.deleteButton} onClick={onClickDelete} disabled={entityStatus === 'loading'}>
             <DeleteIcon fontSize='small' />
           </IconButton>
         </div>
-        <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} />
+        <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} label={'Add task'} />
         <ul className={s.tasksList}>{tasksData}</ul>
         <div className={s.blockButtons}>
           <Button variant={filterValue === 'all' ? 'contained' : 'text'} onClick={onAllClick}>

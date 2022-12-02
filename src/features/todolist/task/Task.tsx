@@ -41,7 +41,7 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
 
   return (
     <>
-      <li className={`${isChecked ? s.completed : ''} ${s.taskContainer}`}>
+      <li className={`${isChecked || entityStatus === 'loading' ? s.completed : ''} ${s.taskContainer}`}>
         <Checkbox
           className={s.taskCheckbox}
           checked={isChecked}
@@ -53,7 +53,7 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
           checkedIcon={<TaskAltIcon />}
         />
         <EditableTitle itemTitle={taskTitle} onChange={onChangeTaskTitle} entityStatus={entityStatus} />
-        <IconButton className={s.taskButton} onClick={onClickButton} disabled={entityStatus === 'loading'}>
+        <IconButton className={s.deleteButton} onClick={onClickButton} disabled={entityStatus === 'loading'}>
           <DeleteIcon fontSize='small' />
         </IconButton>
       </li>

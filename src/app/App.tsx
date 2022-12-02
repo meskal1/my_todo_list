@@ -9,6 +9,7 @@ import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
 import { Todolist } from '../features/todolist/Todolist'
 import { TodolistDomainType, createTodolistTC, fetchTodolistsTC } from '../features/todolist/TodolistReducer'
 import { Routes, Route, Navigate } from 'react-router'
+import { Login } from '../features/login/Login'
 
 type AppType = {
   demo?: boolean
@@ -50,40 +51,26 @@ const App: React.FC<AppType> = ({ demo = false }) => {
     <div className={s.app}>
       <AppBar className={s.appBar} position='static'>
         <Toolbar className={s.toolbar}>
-          {/* <IconButton size='large' edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
+          <IconButton size='large' edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
             <MenuIcon />
-          </IconButton> */}
+          </IconButton>
           {/* <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             News
           </Typography> */}
-          <AddItemForm className={s.addInputForm} addItem={createTodolist} />
+          <AddItemForm addItem={createTodolist} label={'Add todolist'} />
           <Button color='inherit'>Log out</Button>
         </Toolbar>
         {appStatus === 'loading' && <LinearProgress className={s.linearProgress} color='primary' />}
-        {/* <LinearProgress className={s.linearProgress} color='primary' /> */}
       </AppBar>
       <div className={s.todolistsContainer}>
-        {/* <Routes> */}
-        {/* <Route path='/' element={<Navigate to={PATH.HOME} replace />} /> 
-          <Route path={PATH.ABOUT} element={<About />}>
-            <Route path={PATH.ABOUT_MODAL} element={<AboutModal />} />
-          </Route>
-          <Route path='*' element={<Page404 />} /> */}
-        {/* </Routes> */}
-        {/* <Grid container> */}
-        {/* <AddItemForm addItem={createTodolist} /> */}
-        {/* </Grid> */}
-        {/* <Grid container spacing={3}> */}
-        {todolists}
-        {/* </Grid> */}
+        <Routes>
+          <Route path='login' element={<>{todolists}</>} />
+          <Route path='/' element={<Login />} />
+          <Route path='*' element={<>404: Page not found </>} />
+        </Routes>
       </div>
       <CustomizedSnackbars />
     </div>
   )
 }
 export default App
-//   {/*  <Grid item key={todolist.id}> */}
-//   {/*  <Paper style={{ padding: '10px' }}  */}
-
-//    {/*  </Paper>*/}
-//    {/* </Grid> */}

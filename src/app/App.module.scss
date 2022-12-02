@@ -4,13 +4,22 @@
   flex-grow: 1;
   gap: 20px;
   color: #98b5ff;
+  color: white;
+  letter-spacing: 0.5px;
+  line-height: 18px;
   background: #031956;
+  background: white;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 }
 .appBar {
   display: flex;
   flex-direction: column;
 }
 .toolbar {
+  //   padding: 15px 20px !important;
+  //   height: 70px !important;
   background: #344fa1;
   display: flex;
   justify-content: space-between;
@@ -39,23 +48,36 @@
   display: flex;
   flex-direction: column;
   gap: 7px;
-  padding: 10px;
-  max-width: 280px;
-  border-radius: 35px;
+  padding: 10px 10px;
+  flex-basis: 280px;
+  border-radius: 25px;
   background: #344fa1;
-  //   border: 1px solid white;
+  //   flex: 0 1 280px;
+  //   height: 100%;
+  transition: all ease 2s;
 }
 .todolistTitleBlock {
   display: flex;
   align-items: center;
+  padding: 7px 0px 7px 7px;
+  background: #031956;
+  background: rgb(70, 29, 29);
+  border-radius: 18px;
 }
 .todolistTitle {
+  text-align: center;
+  color: #97b6fc;
   flex-basis: 100%;
-  //   align-self: center;
+  font-size: 16px;
+  font-weight: 500;
   & > span {
     text-align: center;
   }
+  &::first-letter {
+    text-transform: uppercase;
+  }
 }
+
 .tasksList {
   display: flex;
   flex-direction: column;
@@ -63,6 +85,13 @@
   gap: 5px;
 }
 .blockButtons {
+  display: flex;
+  justify-content: space-between;
+  & > * {
+    //  background: rgb(164, 161, 161) !important;
+    border-radius: 30px !important;
+    padding: 5px 10px !important;
+  }
 }
 ///////TASK//////
 .taskContainer {
@@ -73,11 +102,10 @@
   padding: 5px 0;
 }
 .taskCheckbox,
-.taskButton {
+.deleteButton {
   align-self: flex-start;
-  //   color: red !important;
 }
-.taskButton {
+.deleteButton {
   color: #98b5ff !important;
 }
 .taskCheckbox {
@@ -102,7 +130,17 @@
 
 .editableTitle {
   width: 100%;
-  display: inline-block;
-  word-wrap: break-word;
-  word-break: break-all;
+  word-break: break-word;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+.editableTitleInput {
+  border: 1px solid red !important;
+}
+
+textarea,
+input {
+  font-family: 'Montserrat', sans-serif !important;
+  //   color: white !important;
 }

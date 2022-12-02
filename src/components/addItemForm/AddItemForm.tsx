@@ -6,10 +6,10 @@ import { ControlPoint } from '@mui/icons-material'
 export type AddItemFormType = {
   addItem: (itemTitle: string) => void
   isDisabled?: boolean
-  className?: string
+  label?: string
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isDisabled, className }) => {
+export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isDisabled, label }) => {
   //   console.log('render ADD_INPUT')
   const [error, setError] = useState<string>('')
   const [inputValue, setInputValue] = useState('')
@@ -34,22 +34,29 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isD
     }
   }
 
+  const onBlurInput = () => {
+    setError('')
+  }
+
   return (
     <>
       <div className={s.addItemFormContainer}>
         <TextField
+          fullWidth
           size='small'
-          className={`${className} ${s.addInputForm}`}
+          className={s.addInputForm}
           disabled={isDisabled}
           error={!!error}
-          label={'Type value'}
+          label={label || 'Type value'}
           helperText={error}
           value={inputValue}
+          onBlur={onBlurInput}
           onChange={onChangeInputHandler}
           onKeyPress={onKeyDownCreateTask}
+          autoComplete='off'
         />
         <IconButton onClick={onClickCreateTask} disabled={isDisabled}>
-          <ControlPoint />
+          <ControlPoint fontSize='small' />
         </IconButton>
       </div>
     </>
