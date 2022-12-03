@@ -8,8 +8,9 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
 import { Todolist } from '../features/todolist/Todolist'
 import { TodolistDomainType, createTodolistTC, fetchTodolistsTC } from '../features/todolist/TodolistReducer'
-import { Routes, Route, Navigate } from 'react-router'
+import { Routes, Route, Navigate, useNavigate } from 'react-router'
 import { Login } from '../features/login/Login'
+import { initializeAppTC } from './AppReducer'
 
 type AppType = {
   demo?: boolean
@@ -21,6 +22,8 @@ const App: React.FC<AppType> = ({ demo = false }) => {
   const todolistsData = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
   const appStatus = useAppSelector(state => state.app.status)
   const tasksData = useAppSelector<TasksType>(state => state.tasks)
+  const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
+  const navigate = useNavigate()
 
   const createTodolist = useCallback((todolistTitle: string) => {
     dispatch(createTodolistTC(todolistTitle))
@@ -42,10 +45,20 @@ const App: React.FC<AppType> = ({ demo = false }) => {
   })
 
   useEffect(() => {
-    if (!demo) {
+    dispatch(initializeAppTC())
+    console.log(isLoggedIn)
+    if (isLoggedIn) {
+      //  if (!demo && isLoggedIn) {
       dispatch(fetchTodolistsTC())
+      navigate('/')
+    } else {
+      navigate('login')
     }
-  }, [])
+
+    //  if (!demo) {
+    //    dispatch(fetchTodolistsTC())
+    //  }
+  }, [isLoggedIn])
 
   return (
     <div className={s.app}>
@@ -64,8 +77,8 @@ const App: React.FC<AppType> = ({ demo = false }) => {
       </AppBar>
       <div className={s.todolistsContainer}>
         <Routes>
-          <Route path='login' element={<>{todolists}</>} />
-          <Route path='/' element={<Login />} />
+          <Route path='/' element={<>{todolists}</>} />
+          <Route path='login' element={<Login />} />
           <Route path='*' element={<>404: Page not found </>} />
         </Routes>
       </div>

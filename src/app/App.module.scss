@@ -9,17 +9,12 @@
   line-height: 18px;
   background: #031956;
   background: white;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  user-select: none;
 }
 .appBar {
   display: flex;
   flex-direction: column;
 }
 .toolbar {
-  //   padding: 15px 20px !important;
-  //   height: 70px !important;
   background: #344fa1;
   display: flex;
   justify-content: space-between;
@@ -52,9 +47,11 @@
   flex-basis: 280px;
   border-radius: 25px;
   background: #344fa1;
-  //   flex: 0 1 280px;
-  //   height: 100%;
+
   transition: all ease 2s;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 }
 .todolistTitleBlock {
   display: flex;

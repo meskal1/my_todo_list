@@ -7,11 +7,13 @@ import { todolistReducer } from '../features/todolist/TodolistReducer'
 import { RootStateType } from './store'
 import { appReducer } from '../app/AppReducer'
 import thunk from 'redux-thunk'
+import { authReducer } from '../features/login/AuthReducer'
 
 const rootReducer = combineReducers({
   todolists: todolistReducer,
   tasks: taskReducer,
   app: appReducer,
+  isLoggedIn: authReducer,
 })
 
 const initialGlobalState = {
@@ -81,6 +83,7 @@ const initialGlobalState = {
     status: 'loading',
     error: '',
   },
+  isLoggedIn: { isLoggedIn: false },
 }
 
 export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as RootStateType, applyMiddleware(thunk))

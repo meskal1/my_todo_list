@@ -8,6 +8,8 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
+import { useAppDispatch } from '../../redux/hooks'
+import { loginTC } from './AuthReducer'
 
 type FormikErrorType = {
   email?: string
@@ -16,6 +18,8 @@ type FormikErrorType = {
 }
 
 export const Login = () => {
+  const dispatch = useAppDispatch()
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -37,7 +41,8 @@ export const Login = () => {
       return errors
     },
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2))
+      // alert(JSON.stringify(values, null, 2))
+      dispatch(loginTC(values))
       formik.resetForm()
     },
   })
@@ -49,7 +54,7 @@ export const Login = () => {
           <FormControl>
             <FormLabel>
               <p>
-                To log in get registered
+                To log in, get registered
                 <a href={'https://social-network.samuraijs.com/'} target={'_blank'}>
                   {' '}
                   here

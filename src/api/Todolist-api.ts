@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 // API
 const instance = axios.create({
   baseURL: 'https://social-network.samuraijs.com/api/1.1/',
-  withCredentials: true, //withCredentials определяет, должны ли межсайтовые (кроссдоменные) запросы выполняться с использованием учетных данных (cookie)
+  withCredentials: true,
   headers: {
     'API-KEY': '2460c652-03c7-4b30-a50a-bdef0c9ad7e8',
   },
@@ -14,25 +14,34 @@ export const todolistAPI = {
     return instance.get<Array<TodolistType>>('todo-lists')
   },
   createTodolist(title: string) {
-    return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', { title })
+    return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TodolistType }>>>('todo-lists', { title })
   },
   deleteTodolist(id: string) {
     return instance.delete<ResponseType>(`todo-lists/${id}`)
   },
   updateTodolistTitle(todolistID: string, title: string) {
-    return instance.put<ResponseType>(`todo-lists/${todolistID}`, { title })
+    return instance.put<{ title: string }, AxiosResponse<ResponseType>>(`todo-lists/${todolistID}`, { title })
   },
   getTasks(todolistID: string) {
     return instance.get<TasksType>(`todo-lists/${todolistID}/tasks`)
   },
   createTask(todolistID: string, title: string) {
-    return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistID}/tasks`, { title })
+    return instance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>(`todo-lists/${todolistID}/tasks`, { title })
   },
   deleteTask(todolistID: string, taskId: string) {
     return instance.delete<ResponseType>(`todo-lists/${todolistID}/tasks/${taskId}`)
   },
   updateTask(todolistID: string, taskId: string, model: UpdateTaskModelType) {
-    return instance.put<ResponseType>(`todo-lists/${todolistID}/tasks/${taskId}`, model)
+    return instance.put<{ model: UpdateTaskModelType }, AxiosResponse<ResponseType>>(`todo-lists/${todolistID}/tasks/${taskId}`, model)
+  },
+}
+
+export const authAPI = {
+  login(data: LoginParamsType) {
+    return instance.post<LoginParamsType, AxiosResponse<ResponseType<{ userId: number }>>>('auth/login', data)
+  },
+  me() {
+    return instance.get<ResponseType<AuthMeType>>('auth/me')
   },
 }
 
@@ -99,4 +108,17 @@ export type ResponseType<D = {}> = {
   messages: Array<string>
   fieldsErrors: Array<string>
   data: D
+}
+
+export type LoginParamsType = {
+  email: string
+  password: string
+  rememberMe?: boolean
+  captcha?: string
+}
+
+export type AuthMeType = {
+  id: number
+  email: string
+  login: string
 }

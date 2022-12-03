@@ -1,7 +1,11 @@
+import { Dispatch } from 'redux'
+import { authAPI, ResultCode } from '../api/Todolist-api'
+import { setIsLoggedInAC } from '../features/login/AuthReducer'
+
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 const initialState = {
-  status: 'loading' as RequestStatusType,
+  status: 'idle' as RequestStatusType,
   error: '',
 }
 
@@ -18,6 +22,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
   }
 }
 
+// ACTIONS
 export const setAppStatusAC = (status: RequestStatusType) => {
   return {
     type: 'SET_APP_STATUS',
@@ -36,8 +41,24 @@ export const setAppErrorAC = (error: string) => {
   } as const
 }
 
+// THUNKS
+export const initializeAppTC = () => async (dispatch: Dispatch) => {
+  try {
+    const response = await authAPI.me()
+    if (response.data.resultCode === ResultCode.Ok) {
+      dispatch(setIsLoggedInAC(true))
+    } else {
+      // handleServerAppError<{ userId: number }>(dispatch, response.data)
+    }
+  } catch (e) {
+    //  const error = e as Error | AxiosError
+    //  handleServerNetworkError(dispatch, error)
+  }
+}
+
+// TYPES
 type ActionsType = SetAppStatusACType | SetAppErrorACType
 
-type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
+export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
 
-type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
+export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
