@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
@@ -8,8 +8,10 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
-import { useAppDispatch } from '../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { loginTC } from './AuthReducer'
+import { useNavigate } from 'react-router'
+import { fetchTodolistsTC } from '../todolists/todolist/TodolistReducer'
 
 type FormikErrorType = {
   email?: string
@@ -19,6 +21,8 @@ type FormikErrorType = {
 
 export const Login = () => {
   const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
+  const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: {
@@ -41,11 +45,16 @@ export const Login = () => {
       return errors
     },
     onSubmit: values => {
-      // alert(JSON.stringify(values, null, 2))
       dispatch(loginTC(values))
       formik.resetForm()
     },
   })
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/')
+    }
+  }, [isLoggedIn])
 
   return (
     <Grid container justifyContent={'center'}>

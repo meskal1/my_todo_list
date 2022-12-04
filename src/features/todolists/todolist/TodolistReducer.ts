@@ -1,9 +1,11 @@
 import React from 'react'
 import { AxiosError } from 'axios'
 import { Dispatch } from 'redux'
-import { ResultCode, todolistAPI, TodolistType } from '../../api/Todolist-api'
-import { RequestStatusType, setAppStatusAC } from '../../app/AppReducer'
-import { handleServerAppError, handleServerNetworkError } from '../../utils/ErrorUtils'
+import { TodolistType, todolistAPI, ResultCode } from '../../../api/Todolist-api'
+import { RequestStatusType, setAppStatusAC } from '../../../app/AppReducer'
+import { handleServerNetworkError, handleServerAppError } from '../../../utils/ErrorUtils'
+import { fetchTasksTC } from './task/TaskReducer'
+import { error } from 'console'
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -116,7 +118,11 @@ export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
     const response = await todolistAPI.getTodolists()
     dispatch(setTodolistsAC(response.data))
     dispatch(setAppStatusAC('succeeded'))
-  } catch {}
+    response.data.forEach(tl => dispatch(fetchTasksTC(tl.id)))
+  } catch (e) {
+    const error = e as Error | AxiosError
+    handleServerNetworkError(dispatch, error)
+  }
 }
 
 export const deleteTodolistTC = (todolistID: string) => async (dispatch: Dispatch) => {

@@ -9,8 +9,8 @@ import {
   TasksType,
   updateTaskAC,
 } from './TaskReducer'
-import { TaskPriorities, TaskStatuses, TaskType } from '../../../api/Todolist-api'
 import { startState as todolists, todolistID1 as todolistId1, todolistID2 as todolistId2 } from '../TodolistReducer.test'
+import { TaskPriorities, TaskStatuses, TaskType } from '../../../../api/Todolist-api'
 
 const restProps = {
   description: '',

@@ -1,13 +1,13 @@
 import { Provider } from 'react-redux'
 import { applyMiddleware, combineReducers, legacy_createStore } from 'redux'
 import { v1 } from 'uuid'
-import { taskReducer } from '../features/todolist/task/TaskReducer'
+import { taskReducer } from '../features/todolists/todolist/task/TaskReducer'
 import { TaskPriorities, TaskStatuses } from '../api/Todolist-api'
-import { todolistReducer } from '../features/todolist/TodolistReducer'
 import { RootStateType } from './store'
 import { appReducer } from '../app/AppReducer'
 import thunk from 'redux-thunk'
 import { authReducer } from '../features/login/AuthReducer'
+import { todolistReducer } from '../features/todolists/todolist/TodolistReducer'
 
 const rootReducer = combineReducers({
   todolists: todolistReducer,
@@ -80,8 +80,9 @@ const initialGlobalState = {
     ],
   },
   app: {
-    status: 'loading',
+    status: 'idle',
     error: '',
+    isInitialized: false,
   },
   isLoggedIn: { isLoggedIn: false },
 }

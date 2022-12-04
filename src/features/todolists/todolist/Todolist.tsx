@@ -4,13 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { Button, IconButton } from '@mui/material'
 import { Task } from './task/Task'
 import { createTaskTC, fetchTasksTC, TaskExtendedType } from './task/TaskReducer'
-import s from '../../app/App.module.scss'
+import s from '../../../app/App.module.scss'
 import { updateTodolistTitleTC, deleteTodolistTC, tasksFilterValueAC } from './TodolistReducer'
-import { TaskStatuses } from '../../api/Todolist-api'
-import { useAppDispatch } from '../../redux/hooks'
-import { RequestStatusType } from '../../app/AppReducer'
-import { AddItemForm } from '../../components/addItemForm/AddItemForm'
-import { EditableTitle } from '../../components/editableTitle/EditableTitle'
+import { TaskStatuses } from '../../../api/Todolist-api'
+import { RequestStatusType } from '../../../app/AppReducer'
+import { AddItemForm } from '../../../components/addItemForm/AddItemForm'
+import { EditableTitle } from '../../../components/editableTitle/EditableTitle'
+import { useAppDispatch } from '../../../redux/hooks'
 
 type TodolistType = {
   todolistID: string
@@ -74,11 +74,11 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
     dispatch(deleteTodolistTC(todolistID))
   }, [])
 
-  useEffect(() => {
-    if (!demo) {
-      dispatch(fetchTasksTC(todolistID))
-    }
-  }, [])
+  //   useEffect(() => {
+  //     if (!demo) {
+  //       dispatch(fetchTasksTC(todolistID))
+  //     }
+  //   }, [])
 
   return (
     <>

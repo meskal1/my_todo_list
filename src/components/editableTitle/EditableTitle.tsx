@@ -8,10 +8,9 @@ export type EditableTitleType = {
   itemTitle: string
   onChange: (taskTitle: string) => void
   entityStatus: RequestStatusType
-  multiline?: boolean
 }
 
-export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange, entityStatus, multiline }) => {
+export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange, entityStatus }) => {
   //   console.log('render EDITABLE_TITLE')
   const [editable, setEditable] = useState(false)
   const [titleValue, setTitleValue] = useState('')
@@ -46,12 +45,6 @@ export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitl
         main: '#e3f2fd', //this overide blue color
         light: 'red', //overides light blue
         dark: 'blue', //overides dark blue color
-        contrastText: '#ffcc00',
-      },
-      info: {
-        main: '#e3f2fd', //this overide blue color
-        light: 'red', //overides light blue
-        dark: 'blue', //overides dark blue color
       },
     },
   })
@@ -66,7 +59,6 @@ export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitl
             multiline={true}
             size='small'
             type='text'
-            label={titleValue ? '' : 'Edite title'}
             value={titleValue}
             onBlur={onBlurInput}
             onChange={onChangeInput}

@@ -1,18 +1,14 @@
 import React, { useCallback } from 'react'
-import { EditableTitle } from '../../../components/editableTitle/EditableTitle'
+import { EditableTitle } from '../../../../components/editableTitle/EditableTitle'
 import { updateTaskTC, deleteTaskTC } from './TaskReducer'
-import s from '../../../app/App.module.scss'
+import s from '../../../../app/App.module.scss'
 import { Checkbox, IconButton } from '@mui/material'
-import { Delete } from '@mui/icons-material'
-// import DeleteIcon from '@material-ui/icons/Delete'
-// import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import DeleteIcon from '@mui/icons-material/Delete'
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
-import { TaskStatuses } from '../../../api/Todolist-api'
-import { useAppDispatch } from '../../../redux/hooks'
-import { RequestStatusType } from '../../../app/AppReducer'
+import { TaskStatuses } from '../../../../api/Todolist-api'
+import { useAppDispatch } from '../../../../redux/hooks'
+import { RequestStatusType } from '../../../../app/AppReducer'
 
 type TaskType = {
   taskID: string

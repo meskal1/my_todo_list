@@ -1,15 +1,14 @@
+import { AxiosError } from 'axios'
 import { Dispatch } from 'redux'
 import { authAPI, ResultCode } from '../api/Todolist-api'
 import { setIsLoggedInAC } from '../features/login/AuthReducer'
-
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+import { handleServerAppError, handleServerNetworkError } from '../utils/ErrorUtils'
 
 const initialState = {
   status: 'idle' as RequestStatusType,
   error: '',
+  isInitialized: false,
 }
-
-export type InitialStateType = typeof initialState
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
@@ -17,6 +16,8 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
       return { ...state, status: action.payload.status }
     case 'SET_APP_ERROR':
       return { ...state, error: action.payload.error }
+    case 'SET_IS_INITIALIZED':
+      return { ...state, isInitialized: action.payload.isInitialized }
     default:
       return state
   }
@@ -41,24 +42,40 @@ export const setAppErrorAC = (error: string) => {
   } as const
 }
 
+export const setIsInitializedAC = (isInitialized: boolean) => {
+  return {
+    type: 'SET_IS_INITIALIZED',
+    payload: {
+      isInitialized,
+    },
+  } as const
+}
+
 // THUNKS
 export const initializeAppTC = () => async (dispatch: Dispatch) => {
   try {
     const response = await authAPI.me()
+    dispatch(setIsInitializedAC(true))
     if (response.data.resultCode === ResultCode.Ok) {
       dispatch(setIsLoggedInAC(true))
     } else {
-      // handleServerAppError<{ userId: number }>(dispatch, response.data)
+      handleServerAppError(dispatch, response.data)
     }
   } catch (e) {
-    //  const error = e as Error | AxiosError
-    //  handleServerNetworkError(dispatch, error)
+    const error = e as Error | AxiosError
+    handleServerNetworkError(dispatch, error)
   }
 }
 
 // TYPES
-type ActionsType = SetAppStatusACType | SetAppErrorACType
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+
+export type InitialStateType = typeof initialState
+
+type ActionsType = SetAppStatusACType | SetAppErrorACType | SetIsInitializedACType
 
 export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
 
 export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
+
+export type SetIsInitializedACType = ReturnType<typeof setIsInitializedAC>

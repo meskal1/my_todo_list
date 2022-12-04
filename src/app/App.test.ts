@@ -3,6 +3,7 @@ import { InitialStateType, RequestStatusType, setAppErrorAC, appReducer, setAppS
 const startState: InitialStateType = {
   status: 'idle' as RequestStatusType,
   error: '',
+  isInitialized: false,
 }
 
 test('correct error message should be set', () => {

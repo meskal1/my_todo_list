@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect } from 'react'
 import { AddItemForm } from '../components/addItemForm/AddItemForm'
 import s from './App.module.scss'
-import { TasksType } from '../features/todolist/task/TaskReducer'
-import { AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper, LinearProgress } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper, LinearProgress, CircularProgress } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
-import { Todolist } from '../features/todolist/Todolist'
-import { TodolistDomainType, createTodolistTC, fetchTodolistsTC } from '../features/todolist/TodolistReducer'
-import { Routes, Route, Navigate, useNavigate } from 'react-router'
+import { Routes, Route } from 'react-router'
 import { Login } from '../features/login/Login'
 import { initializeAppTC } from './AppReducer'
+import { createTodolistTC } from '../features/todolists/todolist/TodolistReducer'
+import { Todolists } from '../features/todolists/Todolists'
+import { logoutTC } from '../features/login/AuthReducer'
 
 type AppType = {
   demo?: boolean
@@ -19,46 +19,31 @@ type AppType = {
 const App: React.FC<AppType> = ({ demo = false }) => {
   //   console.log('render APP')
   const dispatch = useAppDispatch()
-  const todolistsData = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
   const appStatus = useAppSelector(state => state.app.status)
-  const tasksData = useAppSelector<TasksType>(state => state.tasks)
   const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
-  const navigate = useNavigate()
+  const isInitialized = useAppSelector(state => state.app.isInitialized)
 
   const createTodolist = useCallback((todolistTitle: string) => {
     dispatch(createTodolistTC(todolistTitle))
   }, [])
 
-  const todolists = todolistsData.map(todolist => {
-    let filteredTasks = tasksData[todolist.id]
-    return (
-      <Todolist
-        key={todolist.id}
-        todolistID={todolist.id}
-        tasks={filteredTasks}
-        title={todolist.title}
-        filterValue={todolist.filter}
-        entityStatus={todolist.entityStatus}
-        demo={demo}
-      />
-    )
-  })
+  const onClickLogOut = () => {
+    dispatch(logoutTC())
+  }
 
   useEffect(() => {
-    dispatch(initializeAppTC())
-    console.log(isLoggedIn)
-    if (isLoggedIn) {
-      //  if (!demo && isLoggedIn) {
-      dispatch(fetchTodolistsTC())
-      navigate('/')
-    } else {
-      navigate('login')
+    if (!isLoggedIn) {
+      dispatch(initializeAppTC())
     }
-
-    //  if (!demo) {
-    //    dispatch(fetchTodolistsTC())
-    //  }
   }, [isLoggedIn])
+
+  if (!isInitialized) {
+    return (
+      <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
+        <CircularProgress />
+      </div>
+    )
+  }
 
   return (
     <div className={s.app}>
@@ -71,13 +56,15 @@ const App: React.FC<AppType> = ({ demo = false }) => {
             News
           </Typography> */}
           <AddItemForm addItem={createTodolist} label={'Add todolist'} />
-          <Button color='inherit'>Log out</Button>
+          <Button color='inherit' onClick={onClickLogOut}>
+            Log out
+          </Button>
         </Toolbar>
         {appStatus === 'loading' && <LinearProgress className={s.linearProgress} color='primary' />}
       </AppBar>
       <div className={s.todolistsContainer}>
         <Routes>
-          <Route path='/' element={<>{todolists}</>} />
+          <Route path='/' element={<Todolists demo={demo} isLoggedIn={isLoggedIn} />} />
           <Route path='login' element={<Login />} />
           <Route path='*' element={<>404: Page not found </>} />
         </Routes>

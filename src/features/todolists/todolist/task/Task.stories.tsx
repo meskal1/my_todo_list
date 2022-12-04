@@ -1,7 +1,7 @@
-import { ReduxStoreProviderDecorator } from '../../../redux/ReduxStoreProviderDecorator'
+import { ReduxStoreProviderDecorator } from '../../../../redux/ReduxStoreProviderDecorator'
 import { Task } from './Task'
 import { useSelector } from 'react-redux'
-import { RootStateType } from '../../../redux/store'
+import { RootStateType } from '../../../../redux/store'
 import { TasksType } from './TaskReducer'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
