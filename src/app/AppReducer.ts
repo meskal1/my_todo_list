@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
-import { Dispatch } from 'redux'
 import { authAPI, ResultCode } from '../api/Todolist-api'
 import { setIsLoggedInAC } from '../features/login/AuthReducer'
+import { AppDispatchType } from '../redux/store'
 import { handleServerAppError, handleServerNetworkError } from '../utils/ErrorUtils'
 
 const initialState = {
@@ -52,14 +52,14 @@ export const setIsInitializedAC = (isInitialized: boolean) => {
 }
 
 // THUNKS
-export const initializeAppTC = () => async (dispatch: Dispatch) => {
+export const initializeAppTC = () => async (dispatch: AppDispatchType) => {
   try {
     const response = await authAPI.me()
     dispatch(setIsInitializedAC(true))
     if (response.data.resultCode === ResultCode.Ok) {
       dispatch(setIsLoggedInAC(true))
     } else {
-      handleServerAppError(dispatch, response.data)
+      // handleServerAppError(dispatch, response.data)
     }
   } catch (e) {
     const error = e as Error | AxiosError

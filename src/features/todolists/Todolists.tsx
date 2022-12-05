@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
@@ -11,6 +12,7 @@ export type TodolistsType = {
 }
 
 export const Todolists: React.FC<TodolistsType> = React.memo(({ demo = false, isLoggedIn }) => {
+  console.log(4)
   const dispatch = useAppDispatch()
   const todolistsData = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
   const tasksData = useAppSelector<TasksType>(state => state.tasks)
@@ -26,7 +28,6 @@ export const Todolists: React.FC<TodolistsType> = React.memo(({ demo = false, is
         title={todolist.title}
         filterValue={todolist.filter}
         entityStatus={todolist.entityStatus}
-        demo={demo}
       />
     )
   })
@@ -39,5 +40,11 @@ export const Todolists: React.FC<TodolistsType> = React.memo(({ demo = false, is
     }
   }, [isLoggedIn])
 
-  return <>{todolists}</>
+  return (
+    <>
+      <Box display={'flex'} justifyContent={'center'} flexWrap={'wrap'} gap={'10px'} p={'0 15px'}>
+        {todolists}
+      </Box>
+    </>
+  )
 })

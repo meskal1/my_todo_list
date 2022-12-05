@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { AddItemForm } from '../components/addItemForm/AddItemForm'
 import s from './App.module.scss'
-import { AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper, LinearProgress, CircularProgress } from '@mui/material'
+import { AppBar, Toolbar, Button, IconButton, LinearProgress, CircularProgress, Box } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
@@ -17,7 +17,7 @@ type AppType = {
 }
 
 const App: React.FC<AppType> = ({ demo = false }) => {
-  //   console.log('render APP')
+  console.log('render APP')
   const dispatch = useAppDispatch()
   const appStatus = useAppSelector(state => state.app.status)
   const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
@@ -39,38 +39,52 @@ const App: React.FC<AppType> = ({ demo = false }) => {
 
   if (!isInitialized) {
     return (
-      <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
+      <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexGrow={'1'}>
         <CircularProgress />
-      </div>
+      </Box>
     )
   }
 
   return (
-    <div className={s.app}>
-      <AppBar className={s.appBar} position='static'>
-        <Toolbar className={s.toolbar}>
-          <IconButton size='large' edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          {/* <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            News
-          </Typography> */}
-          <AddItemForm addItem={createTodolist} label={'Add todolist'} />
-          <Button color='inherit' onClick={onClickLogOut}>
-            Log out
-          </Button>
-        </Toolbar>
-        {appStatus === 'loading' && <LinearProgress className={s.linearProgress} color='primary' />}
-      </AppBar>
-      <div className={s.todolistsContainer}>
+    <>
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        flexGrow={'1'}
+        gap={'20px'}
+        letterSpacing={'0.5px'}
+        color={'white'}
+        lineHeight={'18px'}
+        bgcolor={'#031956'}>
+        {isLoggedIn && (
+          <>
+            <AppBar position='static'>
+              <Toolbar sx={{ bgcolor: '#344fa1', justifyContent: 'space-between' }}>
+                <IconButton size='large' edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
+                  <MenuIcon />
+                </IconButton>
+                {/* <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+			            News
+			          </Typography> */}
+                <AddItemForm addItem={createTodolist} label={'Add todolist'} />
+                <Button color='inherit' onClick={onClickLogOut}>
+                  Log out
+                </Button>
+              </Toolbar>
+              {appStatus === 'loading' && <LinearProgress className={s.linearProgress} color='primary' />}
+            </AppBar>
+          </>
+        )}
         <Routes>
           <Route path='/' element={<Todolists demo={demo} isLoggedIn={isLoggedIn} />} />
           <Route path='login' element={<Login />} />
           <Route path='*' element={<>404: Page not found </>} />
         </Routes>
-      </div>
-      <CustomizedSnackbars />
-    </div>
+        <Box position={'absolute'}>
+          <CustomizedSnackbars />
+        </Box>
+      </Box>
+    </>
   )
 }
 export default App

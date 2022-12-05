@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import { TaskStatuses } from '../../../../api/Todolist-api'
-import { useAppDispatch } from '../../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { RequestStatusType } from '../../../../app/AppReducer'
 
 type TaskType = {
@@ -21,6 +21,7 @@ type TaskType = {
 export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status, todolistID, entityStatus }) => {
   console.log('render TASK')
   const dispatch = useAppDispatch()
+  const appStatus = useAppSelector(state => state.app.status)
   const isChecked = status === TaskStatuses.Completed
 
   const onClickButton = useCallback(() => {
@@ -28,8 +29,10 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
   }, [])
 
   const onChangeInput = useCallback(() => {
-    dispatch(updateTaskTC(todolistID, taskID, { status: isChecked ? TaskStatuses.New : TaskStatuses.Completed }))
-  }, [status])
+    if (appStatus !== 'loading') {
+      dispatch(updateTaskTC(todolistID, taskID, { status: isChecked ? TaskStatuses.New : TaskStatuses.Completed }))
+    }
+  }, [status, appStatus])
 
   const onChangeTaskTitle = (taskTitle: string) => {
     dispatch(updateTaskTC(todolistID, taskID, { title: taskTitle }))
@@ -49,7 +52,7 @@ export const Task: React.FC<TaskType> = React.memo(({ taskID, taskTitle, status,
           checkedIcon={<TaskAltIcon />}
         />
         <EditableTitle itemTitle={taskTitle} onChange={onChangeTaskTitle} entityStatus={entityStatus} />
-        <IconButton className={s.deleteButton} onClick={onClickButton} disabled={entityStatus === 'loading'}>
+        <IconButton onClick={onClickButton} disabled={entityStatus === 'loading'} sx={{ alignSelf: 'flex-start', color: '#98b5ff' }}>
           <DeleteIcon fontSize='small' />
         </IconButton>
       </li>

@@ -1,11 +1,10 @@
 import React from 'react'
 import { AxiosError } from 'axios'
-import { Dispatch } from 'redux'
 import { TodolistType, todolistAPI, ResultCode } from '../../../api/Todolist-api'
 import { RequestStatusType, setAppStatusAC } from '../../../app/AppReducer'
 import { handleServerNetworkError, handleServerAppError } from '../../../utils/ErrorUtils'
 import { fetchTasksTC } from './task/TaskReducer'
-import { error } from 'console'
+import { AppDispatchType } from '../../../redux/store'
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -47,6 +46,9 @@ export const todolistReducer = (
       return state.map(todolist =>
         todolist.id === action.payload.todolistID ? { ...todolist, entityStatus: action.payload.entityStatus } : todolist
       )
+    }
+    case 'CLEAR_DATA': {
+      return []
     }
     default:
       return state
@@ -111,8 +113,15 @@ export const setTodolistEntityStatusAC = (todolistID: string, entityStatus: Requ
   } as const
 }
 
+export const clearTodolistsDataAC = () => {
+  return {
+    type: 'CLEAR_DATA',
+    payload: {},
+  } as const
+}
+
 // THUNKS
-export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
+export const fetchTodolistsTC = () => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     const response = await todolistAPI.getTodolists()
@@ -125,7 +134,7 @@ export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
   }
 }
 
-export const deleteTodolistTC = (todolistID: string) => async (dispatch: Dispatch) => {
+export const deleteTodolistTC = (todolistID: string) => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     dispatch(setTodolistEntityStatusAC(todolistID, 'loading'))
@@ -139,7 +148,7 @@ export const deleteTodolistTC = (todolistID: string) => async (dispatch: Dispatc
   }
 }
 
-export const createTodolistTC = (todolistTitle: string) => async (dispatch: Dispatch) => {
+export const createTodolistTC = (todolistTitle: string) => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     const response = await todolistAPI.createTodolist(todolistTitle)
@@ -155,7 +164,7 @@ export const createTodolistTC = (todolistTitle: string) => async (dispatch: Disp
   }
 }
 
-export const updateTodolistTitleTC = (todolistID: string, todolistTitle: string) => async (dispatch: Dispatch) => {
+export const updateTodolistTitleTC = (todolistID: string, todolistTitle: string) => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     const response = await todolistAPI.updateTodolistTitle(todolistID, todolistTitle)
@@ -184,6 +193,7 @@ type TodolistReducerType =
   | UpdateTodolistTitleACType
   | SetTodolistsACType
   | SetTodolistEntityStatusACType
+  | ClearTodolistsDataACType
 
 type TasksFilterValueACType = ReturnType<typeof tasksFilterValueAC>
 
@@ -196,3 +206,5 @@ type UpdateTodolistTitleACType = ReturnType<typeof updateTodolistTitleAC>
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
 
 export type SetTodolistEntityStatusACType = ReturnType<typeof setTodolistEntityStatusAC>
+
+export type ClearTodolistsDataACType = ReturnType<typeof clearTodolistsDataAC>

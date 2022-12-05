@@ -18,10 +18,9 @@ type TodolistType = {
   filterValue: string
   tasks: TaskExtendedType
   entityStatus: RequestStatusType
-  demo?: boolean
 }
 
-export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus, demo = false }) => {
+export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus }) => {
   //   console.log(`render TODOLIST ${todolistID}`)
   const dispatch = useAppDispatch()
   let filteredTasks = tasks
@@ -74,12 +73,6 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
     dispatch(deleteTodolistTC(todolistID))
   }, [])
 
-  //   useEffect(() => {
-  //     if (!demo) {
-  //       dispatch(fetchTasksTC(todolistID))
-  //     }
-  //   }, [])
-
   return (
     <>
       <div className={s.todolistContainer}>
@@ -87,14 +80,24 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title,
           <h2 className={s.todolistTitle}>
             <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} entityStatus={entityStatus} />
           </h2>
-          <IconButton className={s.deleteButton} onClick={onClickDelete} disabled={entityStatus === 'loading'}>
+          <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'} sx={{ alignSelf: 'flex-start', color: '#98b5ff' }}>
             <DeleteIcon fontSize='small' />
           </IconButton>
         </div>
         <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} label={'Add task'} />
         <ul className={s.tasksList}>{tasksData}</ul>
         <div className={s.blockButtons}>
-          <Button variant={filterValue === 'all' ? 'contained' : 'text'} onClick={onAllClick}>
+          <Button
+            variant={filterValue === 'all' ? 'contained' : 'text'}
+            onClick={onAllClick}
+            sx={{
+              borderRadius: '30px',
+              bgcolor: '#F8C655',
+              color: 'black',
+              fontWeight: '800',
+              fontFamily: 'Montserrat, sans-serif',
+              letterSpacing: '0.5px',
+            }}>
             All
           </Button>
           <Button variant={filterValue === 'active' ? 'contained' : 'text'} onClick={onActiveClick}>

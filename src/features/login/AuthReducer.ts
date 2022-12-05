@@ -1,13 +1,13 @@
 import { AxiosError } from 'axios'
-import { Dispatch } from 'redux'
 import { authAPI, LoginParamsType, ResultCode } from '../../api/Todolist-api'
 import { SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from '../../app/AppReducer'
+import { AppDispatchType } from '../../redux/store'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/ErrorUtils'
+import { clearTodolistsDataAC } from '../todolists/todolist/TodolistReducer'
 
 const initialState = {
   isLoggedIn: false,
 }
-type InitialStateType = typeof initialState
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
@@ -29,7 +29,7 @@ export const setIsLoggedInAC = (isLoggedIn: boolean) => {
 }
 
 // THUNKS
-export const loginTC = (data: LoginParamsType) => async (dispatch: Dispatch) => {
+export const loginTC = (data: LoginParamsType) => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     const response = await authAPI.login(data)
@@ -45,10 +45,11 @@ export const loginTC = (data: LoginParamsType) => async (dispatch: Dispatch) => 
   }
 }
 
-export const logoutTC = () => async (dispatch: Dispatch) => {
+export const logoutTC = () => async (dispatch: AppDispatchType) => {
   try {
     dispatch(setAppStatusAC('loading'))
     const response = await authAPI.logout()
+    dispatch(clearTodolistsDataAC())
     if (response.data.resultCode === ResultCode.Ok) {
       dispatch(setIsLoggedInAC(false))
       dispatch(setAppStatusAC('succeeded'))
@@ -62,4 +63,6 @@ export const logoutTC = () => async (dispatch: Dispatch) => {
 }
 
 // TYPES
+type InitialStateType = typeof initialState
+
 type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetAppStatusACType | SetAppErrorACType

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Grid from '@mui/material/Grid'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -11,7 +10,9 @@ import { useFormik } from 'formik'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { loginTC } from './AuthReducer'
 import { useNavigate } from 'react-router'
-import { fetchTodolistsTC } from '../todolists/todolist/TodolistReducer'
+import { Box, Typography } from '@mui/material'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import TaskAltIcon from '@mui/icons-material/TaskAlt'
 
 type FormikErrorType = {
   email?: string
@@ -57,38 +58,81 @@ export const Login = () => {
   }, [isLoggedIn])
 
   return (
-    <Grid container justifyContent={'center'}>
-      <Grid item justifyContent={'center'}>
+    <>
+      <Box display={'flex'} justifyContent={'center'} flexGrow={'1'} alignItems={'center'} p={'0 15px'} flexBasis={'600px'}>
         <form onSubmit={formik.handleSubmit}>
-          <FormControl>
+          <FormControl sx={{ bgcolor: '#344fa1', p: '15px', borderRadius: '10px', maxWidth: '370px' }}>
             <FormLabel>
-              <p>
-                To log in, get registered
-                <a href={'https://social-network.samuraijs.com/'} target={'_blank'}>
-                  {' '}
-                  here
-                </a>
-              </p>
-              <p>or use common test account credentials:</p>
-              <p>Email: free@samuraijs.com</p>
-              <p>Password: free</p>
+              <Box sx={{ color: 'white', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.5px', lineHeight: '22px' }}>
+                <p style={{ margin: '0 0 10px 0', textAlign: 'center' }}>
+                  To log in, get registered&nbsp;
+                  <a
+                    href={'https://social-network.samuraijs.com/'}
+                    target={'_blank'}
+                    style={{ color: '#F8C655', fontWeight: '600', textDecoration: 'underline' }}>
+                    here
+                  </a>
+                  &nbsp;or use common test account credentials:
+                  <br />
+                </p>
+                Email: <a style={{ color: '#F8C655', fontWeight: '600' }}>free@samuraijs.com</a> <br />
+                Password: <a style={{ color: '#F8C655', fontWeight: '600' }}>free</a>
+              </Box>
             </FormLabel>
-            <FormGroup>
-              <TextField id='email' type='email' label='Email' margin='normal' {...formik.getFieldProps('email')} />
-              {formik.touched.email && formik.errors.email ? <div style={{ color: 'red' }}>{formik.errors.email}</div> : null}
-              <TextField id='password' type='password' label='Password' margin='normal' {...formik.getFieldProps('password')} />
-              {formik.touched.password && formik.errors.password ? <div style={{ color: 'red' }}>{formik.errors.password}</div> : null}
-              <FormControlLabel
-                label={'Remember me'}
-                control={<Checkbox {...formik.getFieldProps('rememberMe')} checked={formik.values.rememberMe} />}
+            <FormGroup sx={{ gap: '10px' }}>
+              <TextField size='small' variant='standard' id='email' type='email' label='Email' {...formik.getFieldProps('email')} />
+              {formik.touched.email && formik.errors.email && <div style={{ color: 'red' }}>{formik.errors.email}</div>}
+              <TextField
+                size='small'
+                variant='standard'
+                id='password'
+                type='password'
+                label='Password'
+                {...formik.getFieldProps('password')}
               />
-              <Button type={'submit'} variant={'contained'} color={'primary'}>
-                Login
+              {formik.touched.password && formik.errors.password && <div style={{ color: 'red' }}>{formik.errors.password}</div>}
+              <FormControlLabel
+                label={
+                  <Typography
+                    sx={{
+                      fontFamily: 'inherit',
+                      letterSpacing: 'inherit',
+                      userSelect: 'none',
+                      MozUserSelect: 'none',
+                      KhtmlUserSelect: 'none',
+                    }}>
+                    Remember me
+                  </Typography>
+                }
+                control={
+                  <Checkbox
+                    {...formik.getFieldProps('rememberMe')}
+                    style={formik.values.rememberMe ? { color: '#00ff26 ' } : { color: 'red ' }}
+                    checked={formik.values.rememberMe}
+                    icon={<RadioButtonUncheckedIcon />}
+                    checkedIcon={<TaskAltIcon />}
+                  />
+                }
+              />
+              <Button
+                type={'submit'}
+                sx={{
+                  borderRadius: '30px',
+                  bgcolor: '#F8C655',
+                  color: 'black',
+                  fontWeight: '800',
+                  fontFamily: 'inherit',
+                  letterSpacing: 'inherit',
+                  '&:hover': { backgroundColor: '#F8C655' },
+                }}>
+                Log in
               </Button>
             </FormGroup>
           </FormControl>
         </form>
-      </Grid>
-    </Grid>
+      </Box>
+    </>
   )
 }
+
+// '&:hover': { backgroundColor: 'white', }

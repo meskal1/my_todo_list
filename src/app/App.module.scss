@@ -1,24 +1,3 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 20px;
-  color: #98b5ff;
-  //   color: white;
-  letter-spacing: 0.5px;
-  line-height: 18px;
-  background: #031956;
-  //   background: white;
-}
-.appBar {
-  display: flex;
-  flex-direction: column;
-}
-.toolbar {
-  background: #344fa1;
-  display: flex;
-  justify-content: space-between;
-}
 .addInputForm {
   width: 100%;
 }
@@ -29,13 +8,6 @@
   position: absolute !important;
   top: 60px;
   width: 100%;
-}
-.todolistsContainer {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 0 15px;
 }
 
 //////TODOLIST////////
@@ -57,14 +29,16 @@
   display: flex;
   align-items: center;
   padding: 7px 0px 7px 7px;
-  background: #031956;
+  //   background: #031956;
   //   background: rgb(70, 29, 29);
-  background: #000000;
+  //  background: #3395fe;
   border-radius: 18px;
 }
 .todolistTitle {
   text-align: center;
-  color: #97b6fc;
+  //   color: #97b6fc;
+  color: white;
+  //   color: #ffb300;
   flex-basis: 100%;
   font-size: 16px;
   font-weight: 500;
@@ -99,14 +73,8 @@
   border-radius: 18px;
   padding: 5px 0;
 }
-.taskCheckbox,
-.deleteButton {
-  align-self: flex-start;
-}
-.deleteButton {
-  color: #98b5ff !important;
-}
 .taskCheckbox {
+  align-self: flex-start;
 }
 
 //////////////
