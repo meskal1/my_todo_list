@@ -31,7 +31,7 @@ const App: React.FC<AppType> = ({ demo = false }) => {
     dispatch(logoutTC())
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!isLoggedIn) {
       dispatch(initializeAppTC())
     }

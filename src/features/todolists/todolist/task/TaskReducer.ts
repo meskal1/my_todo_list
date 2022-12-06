@@ -1,5 +1,5 @@
 import React from 'react'
-import { TaskPriorities, TaskStatuses, TaskType, todolistAPI, ResultCode } from '../../../../api/Todolist-api'
+import { TaskType, todolistAPI, ResultCode, UpdateTaskModelType } from '../../../../api/Todolist-api'
 import { DeleteTodolistACType, CreateTodolistACType, SetTodolistsACType, ClearTodolistsDataACType } from '../TodolistReducer'
 import { AppDispatchType, RootStateType } from '../../../../redux/store'
 import { RequestStatusType, setAppErrorAC, setAppStatusAC } from '../../../../app/AppReducer'
@@ -8,21 +8,21 @@ import { handleServerAppError, handleServerNetworkError } from '../../../../util
 
 const initialState: TasksType = {}
 
-export const taskReducer = (state: TasksType = initialState, action: ActionType): TasksType => {
+export const taskReducer = (state: TasksType = initialState, action: ActionsType): TasksType => {
   switch (action.type) {
-    case 'DELETE_TASK': {
+    case 'task/DELETE_TASK': {
       return {
         ...state,
         [action.payload.todolistID]: state[action.payload.todolistID].filter(taskElement => taskElement.id !== action.payload.taskID),
       }
     }
-    case 'CREATE_TASK': {
+    case 'task/CREATE_TASK': {
       return {
         ...state,
         [action.payload.task.todoListId]: [{ ...action.payload.task, entityStatus: 'succeeded' }, ...state[action.payload.task.todoListId]],
       }
     }
-    case 'UPDATE_TASK': {
+    case 'task/UPDATE_TASK': {
       return {
         ...state,
         [action.payload.todolistID]: state[action.payload.todolistID].map(taskElement =>
@@ -30,25 +30,25 @@ export const taskReducer = (state: TasksType = initialState, action: ActionType)
         ),
       }
     }
-    case 'DELETE_TODOLIST': {
+    case 'todolist/DELETE_TODOLIST': {
       const copyState = { ...state }
       delete copyState[action.payload.todolistID]
       return copyState
     }
-    case 'CREATE_TODOLIST': {
+    case 'todolist/CREATE_TODOLIST': {
       return { ...state, [action.payload.todolist.id]: [] }
     }
-    case 'SET_TODOLISTS': {
+    case 'todolist/SET_TODOLISTS': {
       const stateCopy = { ...state }
       action.payload.todolists.forEach(tl => {
         stateCopy[tl.id] = []
       })
       return stateCopy
     }
-    case 'SET_TASKS': {
+    case 'task/SET_TASKS': {
       return { ...state, [action.payload.todolistID]: action.payload.tasks.map(t => ({ ...t, entityStatus: 'succeeded' })) }
     }
-    case 'SET_TASK_ENTITY_STATUS': {
+    case 'task/SET_TASK_ENTITY_STATUS': {
       return {
         ...state,
         [action.payload.todolistID]: state[action.payload.todolistID].map(taskElement =>
@@ -56,7 +56,7 @@ export const taskReducer = (state: TasksType = initialState, action: ActionType)
         ),
       }
     }
-    case 'CLEAR_DATA': {
+    case 'todolist_task/CLEAR_DATA': {
       return {}
     }
     default:
@@ -67,7 +67,7 @@ export const taskReducer = (state: TasksType = initialState, action: ActionType)
 // ACTIONS
 export const deleteTaskAC = (todolistID: string, taskID: string) => {
   return {
-    type: 'DELETE_TASK',
+    type: 'task/DELETE_TASK',
     payload: {
       todolistID,
       taskID,
@@ -77,7 +77,7 @@ export const deleteTaskAC = (todolistID: string, taskID: string) => {
 
 export const createTaskAC = (task: TaskType) => {
   return {
-    type: 'CREATE_TASK',
+    type: 'task/CREATE_TASK',
     payload: {
       task,
     },
@@ -86,7 +86,7 @@ export const createTaskAC = (task: TaskType) => {
 
 export const updateTaskAC = (todolistID: string, taskID: string, domainModel: UpdateDomainTaskModelType) => {
   return {
-    type: 'UPDATE_TASK',
+    type: 'task/UPDATE_TASK',
     payload: {
       todolistID,
       taskID,
@@ -97,7 +97,7 @@ export const updateTaskAC = (todolistID: string, taskID: string, domainModel: Up
 
 export const setTasksAC = (todolistID: string, tasks: Array<TaskType>) => {
   return {
-    type: 'SET_TASKS',
+    type: 'task/SET_TASKS',
     payload: {
       todolistID,
       tasks,
@@ -107,7 +107,7 @@ export const setTasksAC = (todolistID: string, tasks: Array<TaskType>) => {
 
 export const setTaskEntityStatusAC = (todolistID: string, taskID: string, entityStatus: RequestStatusType) => {
   return {
-    type: 'SET_TASK_ENTITY_STATUS',
+    type: 'task/SET_TASK_ENTITY_STATUS',
     payload: {
       todolistID,
       taskID,
@@ -197,7 +197,7 @@ export type TasksType = {
   [key: string]: TaskExtendedType
 }
 
-type ActionType =
+type ActionsType =
   | DeleteTaskACType
   | DeleteTodolistACType
   | CreateTaskACType
@@ -218,11 +218,4 @@ type SetTasksACType = ReturnType<typeof setTasksAC>
 
 type SetTaskEntityStatusACType = ReturnType<typeof setTaskEntityStatusAC>
 
-type UpdateDomainTaskModelType = {
-  deadline?: string
-  description?: string
-  priority?: TaskPriorities
-  startDate?: string
-  status?: TaskStatuses
-  title?: string
-}
+type UpdateDomainTaskModelType = Partial<UpdateTaskModelType>

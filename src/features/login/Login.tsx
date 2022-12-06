@@ -22,6 +22,7 @@ type FormikErrorType = {
 
 export const Login = () => {
   const dispatch = useAppDispatch()
+  const appStatus = useAppSelector(state => state.app.status)
   const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
   const navigate = useNavigate()
 
@@ -46,13 +47,15 @@ export const Login = () => {
       return errors
     },
     onSubmit: values => {
-      dispatch(loginTC(values))
-      formik.resetForm()
+      if (appStatus !== 'loading') {
+        dispatch(loginTC(values))
+      }
     },
   })
 
   useEffect(() => {
     if (isLoggedIn) {
+      formik.resetForm()
       navigate('/')
     }
   }, [isLoggedIn])
@@ -134,5 +137,3 @@ export const Login = () => {
     </>
   )
 }
-
-// '&:hover': { backgroundColor: 'white', }

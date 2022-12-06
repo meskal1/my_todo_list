@@ -13,15 +13,15 @@ export const todolistReducer = (
   action: TodolistReducerType
 ): Array<TodolistDomainType> => {
   switch (action.type) {
-    case 'TASKS_FILTER_VALUE': {
+    case 'task/TASKS_FILTER_VALUE': {
       return state.map(todolist =>
         todolist.id === action.payload.todolistID ? { ...todolist, filter: action.payload.filterValue } : todolist
       )
     }
-    case 'DELETE_TODOLIST': {
+    case 'todolist/DELETE_TODOLIST': {
       return state.filter(todolist => todolist.id !== action.payload.todolistID)
     }
-    case 'CREATE_TODOLIST': {
+    case 'todolist/CREATE_TODOLIST': {
       return [
         {
           id: action.payload.todolist.id,
@@ -34,20 +34,20 @@ export const todolistReducer = (
         ...state,
       ]
     }
-    case 'UPDATE_TODOLIST_TITLE': {
+    case 'todolist/UPDATE_TODOLIST_TITLE': {
       return state.map(todolist =>
         todolist.id === action.payload.todolistID ? { ...todolist, title: action.payload.todolistTitle } : todolist
       )
     }
-    case 'SET_TODOLISTS': {
+    case 'todolist/SET_TODOLISTS': {
       return action.payload.todolists.map(obj => ({ ...obj, filter: 'all', entityStatus: 'idle' }))
     }
-    case 'SET_TODOLIST_ENTITY_STATUS': {
+    case 'todolist/SET_TODOLIST_ENTITY_STATUS': {
       return state.map(todolist =>
         todolist.id === action.payload.todolistID ? { ...todolist, entityStatus: action.payload.entityStatus } : todolist
       )
     }
-    case 'CLEAR_DATA': {
+    case 'todolist_task/CLEAR_DATA': {
       return []
     }
     default:
@@ -58,7 +58,7 @@ export const todolistReducer = (
 // ACTIONS
 export const tasksFilterValueAC = (todolistID: string, filterValue: FilterValuesType) => {
   return {
-    type: 'TASKS_FILTER_VALUE',
+    type: 'task/TASKS_FILTER_VALUE',
     payload: {
       todolistID,
       filterValue,
@@ -68,7 +68,7 @@ export const tasksFilterValueAC = (todolistID: string, filterValue: FilterValues
 
 export const deleteTodolistAC = (todolistID: string) => {
   return {
-    type: 'DELETE_TODOLIST',
+    type: 'todolist/DELETE_TODOLIST',
     payload: {
       todolistID,
     },
@@ -77,7 +77,7 @@ export const deleteTodolistAC = (todolistID: string) => {
 
 export const createTodolistAC = (todolist: TodolistType) => {
   return {
-    type: 'CREATE_TODOLIST',
+    type: 'todolist/CREATE_TODOLIST',
     payload: {
       todolist,
     },
@@ -86,7 +86,7 @@ export const createTodolistAC = (todolist: TodolistType) => {
 
 export const updateTodolistTitleAC = (todolistID: string, todolistTitle: string) => {
   return {
-    type: 'UPDATE_TODOLIST_TITLE',
+    type: 'todolist/UPDATE_TODOLIST_TITLE',
     payload: {
       todolistID,
       todolistTitle,
@@ -96,7 +96,7 @@ export const updateTodolistTitleAC = (todolistID: string, todolistTitle: string)
 
 export const setTodolistsAC = (todolists: Array<TodolistType>) => {
   return {
-    type: 'SET_TODOLISTS',
+    type: 'todolist/SET_TODOLISTS',
     payload: {
       todolists,
     },
@@ -105,7 +105,7 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) => {
 
 export const setTodolistEntityStatusAC = (todolistID: string, entityStatus: RequestStatusType) => {
   return {
-    type: 'SET_TODOLIST_ENTITY_STATUS',
+    type: 'todolist/SET_TODOLIST_ENTITY_STATUS',
     payload: {
       todolistID,
       entityStatus,
@@ -113,9 +113,9 @@ export const setTodolistEntityStatusAC = (todolistID: string, entityStatus: Requ
   } as const
 }
 
-export const clearTodolistsDataAC = () => {
+export const clearTodolistsTasksDataAC = () => {
   return {
-    type: 'CLEAR_DATA',
+    type: 'todolist_task/CLEAR_DATA',
     payload: {},
   } as const
 }
@@ -207,4 +207,4 @@ export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
 
 export type SetTodolistEntityStatusACType = ReturnType<typeof setTodolistEntityStatusAC>
 
-export type ClearTodolistsDataACType = ReturnType<typeof clearTodolistsDataAC>
+export type ClearTodolistsDataACType = ReturnType<typeof clearTodolistsTasksDataAC>
