@@ -1,8 +1,9 @@
-import { AxiosError } from 'axios'
-import { authAPI, ResultCode } from '../api/Todolist-api'
-import { setIsLoggedInAC } from '../features/login/AuthReducer'
+import { ResultCode, authAPI } from '../api/Todolist-api'
+
 import { AppDispatchType } from '../redux/store'
-import { handleServerAppError, handleServerNetworkError } from '../utils/ErrorUtils'
+import { AxiosError } from 'axios'
+import { handleServerNetworkError } from '../utils/ErrorUtils'
+import { setIsLoggedInAC } from '../features/login/AuthReducer'
 
 const initialState = {
   status: 'idle' as RequestStatusType,
@@ -12,11 +13,11 @@ const initialState = {
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
-    case 'SET_APP_STATUS':
+    case 'appStatus/SET_APP_STATUS':
       return { ...state, status: action.payload.status }
-    case 'SET_APP_ERROR':
+    case 'error/SET_APP_ERROR':
       return { ...state, error: action.payload.error }
-    case 'SET_IS_INITIALIZED':
+    case 'authMe/SET_IS_INITIALIZED':
       return { ...state, isInitialized: action.payload.isInitialized }
     default:
       return state
@@ -26,7 +27,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 // ACTIONS
 export const setAppStatusAC = (status: RequestStatusType) => {
   return {
-    type: 'SET_APP_STATUS',
+    type: 'appStatus/SET_APP_STATUS',
     payload: {
       status,
     },
@@ -35,7 +36,7 @@ export const setAppStatusAC = (status: RequestStatusType) => {
 
 export const setAppErrorAC = (error: string) => {
   return {
-    type: 'SET_APP_ERROR',
+    type: 'error/SET_APP_ERROR',
     payload: {
       error,
     },
@@ -44,7 +45,7 @@ export const setAppErrorAC = (error: string) => {
 
 export const setIsInitializedAC = (isInitialized: boolean) => {
   return {
-    type: 'SET_IS_INITIALIZED',
+    type: 'authMe/SET_IS_INITIALIZED',
     payload: {
       isInitialized,
     },

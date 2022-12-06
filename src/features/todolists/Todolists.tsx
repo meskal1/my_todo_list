@@ -1,10 +1,11 @@
-import { Box } from '@mui/material'
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { TodolistDomainType, fetchTodolistsTC } from './todolist/TodolistReducer'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+
+import { Box } from '@mui/material'
 import { TasksType } from './todolist/task/TaskReducer'
 import { Todolist } from './todolist/Todolist'
-import { fetchTodolistsTC, TodolistDomainType } from './todolist/TodolistReducer'
+import { useNavigate } from 'react-router'
 
 export type TodolistsType = {
   isLoggedIn: boolean

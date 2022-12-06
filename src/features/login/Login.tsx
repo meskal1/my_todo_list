@@ -1,18 +1,19 @@
+import { Box, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+
+import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import { useFormik } from 'formik'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { loginTC } from './AuthReducer'
-import { useNavigate } from 'react-router'
-import { Box, Typography } from '@mui/material'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
+import TextField from '@mui/material/TextField'
+import { loginTC } from './AuthReducer'
+import { useFormik } from 'formik'
+import { useNavigate } from 'react-router'
 
 type FormikErrorType = {
   email?: string
@@ -34,16 +35,19 @@ export const Login = () => {
     },
     validate: values => {
       const errors: FormikErrorType = {}
+
       if (!values.email) {
         errors.email = 'Required'
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address'
       }
+
       if (!values.password) {
         errors.password = 'Required'
       } else if (values.password.length < 3) {
         errors.password = 'Password must be more then 2 symbols'
       }
+
       return errors
     },
     onSubmit: values => {

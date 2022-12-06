@@ -1,8 +1,9 @@
-import { AxiosError } from 'axios'
-import { authAPI, LoginParamsType, ResultCode } from '../../api/Todolist-api'
-import { SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from '../../app/AppReducer'
-import { AppDispatchType } from '../../redux/store'
+import { LoginParamsType, ResultCode, authAPI } from '../../api/Todolist-api'
+import { SetAppErrorACType, SetAppStatusACType, setAppStatusAC } from '../../app/AppReducer'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/ErrorUtils'
+
+import { AppDispatchType } from '../../redux/store'
+import { AxiosError } from 'axios'
 import { clearTodolistsTasksDataAC } from '../todolists/todolist/TodolistReducer'
 
 const initialState = {

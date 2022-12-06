@@ -1,10 +1,11 @@
-import React from 'react'
-import { TaskType, todolistAPI, ResultCode, UpdateTaskModelType } from '../../../../api/Todolist-api'
-import { DeleteTodolistACType, CreateTodolistACType, SetTodolistsACType, ClearTodolistsDataACType } from '../TodolistReducer'
 import { AppDispatchType, RootStateType } from '../../../../redux/store'
+import { ClearTodolistsDataACType, CreateTodolistACType, DeleteTodolistACType, SetTodolistsACType } from '../TodolistReducer'
 import { RequestStatusType, setAppErrorAC, setAppStatusAC } from '../../../../app/AppReducer'
-import { AxiosError } from 'axios'
+import { ResultCode, TaskType, UpdateTaskModelType, todolistAPI } from '../../../../api/Todolist-api'
 import { handleServerAppError, handleServerNetworkError } from '../../../../utils/ErrorUtils'
+
+import { AxiosError } from 'axios'
+import React from 'react'
 
 const initialState: TasksType = {}
 

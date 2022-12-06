@@ -1,10 +1,11 @@
-import React from 'react'
-import { AxiosError } from 'axios'
-import { TodolistType, todolistAPI, ResultCode } from '../../../api/Todolist-api'
 import { RequestStatusType, setAppStatusAC } from '../../../app/AppReducer'
-import { handleServerNetworkError, handleServerAppError } from '../../../utils/ErrorUtils'
-import { fetchTasksTC } from './task/TaskReducer'
+import { ResultCode, TodolistType, todolistAPI } from '../../../api/Todolist-api'
+import { handleServerAppError, handleServerNetworkError } from '../../../utils/ErrorUtils'
+
 import { AppDispatchType } from '../../../redux/store'
+import { AxiosError } from 'axios'
+import React from 'react'
+import { fetchTasksTC } from './task/TaskReducer'
 
 const initialState: Array<TodolistDomainType> = []
 

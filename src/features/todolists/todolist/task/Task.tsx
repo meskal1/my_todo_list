@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react'
-import { EditableTitle } from '../../../../components/editableTitle/EditableTitle'
-import { updateTaskTC, deleteTaskTC } from './TaskReducer'
-import s from '../../../../app/App.module.scss'
 import { Checkbox, IconButton } from '@mui/material'
+import React, { useCallback } from 'react'
+import { deleteTaskTC, updateTaskTC } from './TaskReducer'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
+
 import DeleteIcon from '@mui/icons-material/Delete'
+import { EditableTitle } from '../../../../components/editableTitle/EditableTitle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { RequestStatusType } from '../../../../app/AppReducer'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import { TaskStatuses } from '../../../../api/Todolist-api'
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { RequestStatusType } from '../../../../app/AppReducer'
+import s from '../../../../app/App.module.scss'
 
 type TaskType = {
   taskID: string

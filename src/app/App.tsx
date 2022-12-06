@@ -1,16 +1,17 @@
+import { AppBar, Box, Button, CircularProgress, IconButton, LinearProgress, Toolbar } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
-import { AddItemForm } from '../components/addItemForm/AddItemForm'
-import s from './App.module.scss'
-import { AppBar, Toolbar, Button, IconButton, LinearProgress, CircularProgress, Box } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
+import { Route, Routes } from 'react-router'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
+
+import { AddItemForm } from '../components/addItemForm/AddItemForm'
 import { CustomizedSnackbars } from '../components/errorSnackbar/ErrorSnackbar'
-import { Routes, Route } from 'react-router'
 import { Login } from '../features/login/Login'
-import { initializeAppTC } from './AppReducer'
-import { createTodolistTC } from '../features/todolists/todolist/TodolistReducer'
+import MenuIcon from '@mui/icons-material/Menu'
 import { Todolists } from '../features/todolists/Todolists'
+import { createTodolistTC } from '../features/todolists/todolist/TodolistReducer'
+import { initializeAppTC } from './AppReducer'
 import { logoutTC } from '../features/login/AuthReducer'
+import s from './App.module.scss'
 
 type AppType = {
   demo?: boolean
@@ -31,7 +32,7 @@ const App: React.FC<AppType> = ({ demo = false }) => {
     dispatch(logoutTC())
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!isLoggedIn) {
       dispatch(initializeAppTC())
     }
