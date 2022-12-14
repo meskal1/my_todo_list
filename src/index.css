@@ -1,11 +1,46 @@
-@import './reset.scss';
-body {
+*,
+*::before,
+*::after {
   margin: 0;
-  /* font-family: 'League Spartan', sans-serif; */
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+li {
+  list-style: none;
+}
+a,
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+img {
+  vertical-align: top;
+}
+html,
+body {
   font-family: 'Montserrat', sans-serif;
-  /* font-family: 'League Spartan','Montserrat', 'Poppins', 'Roboto', 'Rubik', 'Sen'; */
-  /* -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
+  height: 100%;
+  line-height: 1;
+  /* When you tap, it removes the background rectangles */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html {
+  font-size: 14px;
+  color: black;
 }
 
 code {

@@ -76,14 +76,15 @@ export const Login = () => {
                   <a
                     href={'https://social-network.samuraijs.com/'}
                     target={'_blank'}
-                    style={{ color: '#F8C655', fontWeight: '600', textDecoration: 'underline' }}>
+                    style={{ color: '#F8C655', fontWeight: '600', textDecoration: 'underline' }}
+                    rel='noreferrer'>
                     here
                   </a>
                   &nbsp;or use common test account credentials:
                   <br />
                 </p>
-                Email: <a style={{ color: '#F8C655', fontWeight: '600' }}>free@samuraijs.com</a> <br />
-                Password: <a style={{ color: '#F8C655', fontWeight: '600' }}>free</a>
+                Email: <span style={{ color: '#F8C655', fontWeight: '600' }}>free@samuraijs.com</span> <br />
+                Password: <span style={{ color: '#F8C655', fontWeight: '600' }}>free</span>
               </Box>
             </FormLabel>
             <FormGroup sx={{ gap: '10px' }}>

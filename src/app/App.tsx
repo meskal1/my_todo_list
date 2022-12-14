@@ -24,19 +24,26 @@ const App: React.FC<AppType> = ({ demo = false }) => {
   const isLoggedIn = useAppSelector(state => state.isLoggedIn.isLoggedIn)
   const isInitialized = useAppSelector(state => state.app.isInitialized)
 
-  const createTodolist = useCallback((todolistTitle: string) => {
-    dispatch(createTodolistTC(todolistTitle))
-  }, [])
+  const createTodolist = useCallback(
+    (todolistTitle: string) => {
+      dispatch(createTodolistTC(todolistTitle))
+    },
+    [dispatch]
+  )
 
   const onClickLogOut = () => {
     dispatch(logoutTC())
   }
+  console.log(process.env.REACT_APP_BASE_URL)
 
   useEffect(() => {
     if (!isLoggedIn) {
       dispatch(initializeAppTC())
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, dispatch])
+
+  console.log('isLoggedIn: ', isLoggedIn)
+  console.log('isInitialized: ', isInitialized)
 
   if (!isInitialized) {
     return (
