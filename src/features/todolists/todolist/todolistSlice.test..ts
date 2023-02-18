@@ -1,24 +1,39 @@
 import { v1 } from 'uuid'
+
 import {
-  createTodolistAC,
-  updateTodolistTitleAC,
-  deleteTodolistAC,
-  setTodolistsAC,
-  tasksFilterValueAC,
+  createTodolist,
+  updateTodolistTitle,
+  deleteTodolist,
+  setTodolists,
+  tasksFilterValue,
   TodolistDomainType,
   todolistReducer,
-  setTodolistEntityStatusAC,
-} from './TodolistReducer'
+  setTodolistEntityStatus,
+} from './todolistSlice'
 
 export const todolistID1 = v1()
 export const todolistID2 = v1()
 export const startState: Array<TodolistDomainType> = [
-  { id: todolistID2, title: 'Title2', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle' },
-  { id: todolistID1, title: 'Buy a book', filter: 'active', addedDate: '', order: 0, entityStatus: 'idle' },
+  {
+    id: todolistID2,
+    title: 'Title2',
+    filter: 'all',
+    addedDate: '',
+    order: 0,
+    entityStatus: 'idle',
+  },
+  {
+    id: todolistID1,
+    title: 'Buy a book',
+    filter: 'active',
+    addedDate: '',
+    order: 0,
+    entityStatus: 'idle',
+  },
 ]
 
 test('case should remove todolist', () => {
-  const action = deleteTodolistAC(todolistID1)
+  const action = deleteTodolist({ todolistID: 'todolistID1' })
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -36,7 +51,7 @@ test('case should add todolist', () => {
     entityStatus: 'idle',
   }
 
-  const action = createTodolistAC(todolist)
+  const action = createTodolist({ todolist })
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -48,7 +63,7 @@ test('case should add todolist', () => {
 test('case should change todolist title', () => {
   const newTitleTodoList = 'Buy a milk'
 
-  const action = updateTodolistTitleAC(todolistID2, newTitleTodoList)
+  const action = updateTodolistTitle({ todolistID: 'todolistID2', todolistTitle: newTitleTodoList })
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -58,7 +73,7 @@ test('case should change todolist title', () => {
 test('case should change todolist filter value', () => {
   const newFilterValue = 'completed'
 
-  const action = tasksFilterValueAC(todolistID1, newFilterValue)
+  const action = tasksFilterValue({ todolistID: 'todolistID1', filterValue: newFilterValue })
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -66,7 +81,7 @@ test('case should change todolist filter value', () => {
 })
 
 test('todolists should be set to the state', () => {
-  const action = setTodolistsAC(startState)
+  const action = setTodolists({ todolists: startState })
 
   const endState: Array<TodolistDomainType> = todolistReducer([], action)
 
@@ -74,7 +89,7 @@ test('todolists should be set to the state', () => {
 })
 
 test('correct entity status of todolist should be changed', () => {
-  const action = setTodolistEntityStatusAC(todolistID1, 'loading')
+  const action = setTodolistEntityStatus({ todolistID: 'todolistID1', entityStatus: 'loading' })
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 

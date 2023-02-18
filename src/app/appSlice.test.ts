@@ -1,4 +1,10 @@
-import { InitialStateType, RequestStatusType, setAppErrorAC, appReducer, setAppStatusAC } from './AppReducer'
+import {
+  RequestStatusType,
+  setAppError,
+  appReducer,
+  setAppStatus,
+  InitialStateType,
+} from './appSlice'
 
 const startState: InitialStateType = {
   status: 'idle' as RequestStatusType,
@@ -7,7 +13,7 @@ const startState: InitialStateType = {
 }
 
 test('correct error message should be set', () => {
-  const action = setAppErrorAC('some error')
+  const action = setAppError('some error')
 
   const endState: InitialStateType = appReducer(startState, action)
 
@@ -15,7 +21,7 @@ test('correct error message should be set', () => {
 })
 
 test('correct status should be set', () => {
-  const action = setAppStatusAC('loading')
+  const action = setAppStatus('loading')
 
   const endState: InitialStateType = appReducer(startState, action)
 

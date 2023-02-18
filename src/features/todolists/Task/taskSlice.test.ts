@@ -1,16 +1,22 @@
-import { createTodolistAC, deleteTodolistAC, setTodolistsAC } from '../TodolistReducer'
+import { TaskPriorities, TaskStatuses } from '../../../constants/task.enum'
+import { TaskType } from '../../../services/todolistApi'
+import { createTodolist, deleteTodolist, setTodolists } from '../Todolist/todolistSlice'
 import {
-  createTaskAC,
-  deleteTaskAC,
-  setTaskEntityStatusAC,
-  setTasksAC,
+  startState as todolists,
+  todolistID1 as todolistId1,
+  todolistID2 as todolistId2,
+} from '../Todolist/todolistSlice.test.'
+
+import {
+  createTask,
+  deleteTask,
+  setTaskEntityStatus,
+  setTasks,
   TaskExtendedType,
   taskReducer,
   TasksType,
-  updateTaskAC,
-} from './TaskReducer'
-import { startState as todolists, todolistID1 as todolistId1, todolistID2 as todolistId2 } from '../TodolistReducer.test'
-import { TaskPriorities, TaskStatuses, TaskType } from '../../../../api/Todolist-api'
+  updateTask,
+} from './taskSlice'
 
 const restProps = {
   description: '',
@@ -22,19 +28,61 @@ const restProps = {
 }
 const startState: TasksType = {
   todoListID1: [
-    { id: '1', title: 'CSS', status: TaskStatuses.New, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
-    { id: '2', title: 'JS', status: TaskStatuses.Completed, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
-    { id: '3', title: 'React', status: TaskStatuses.Completed, todoListId: 'todoListID1', entityStatus: 'idle', ...restProps },
+    {
+      id: '1',
+      title: 'CSS',
+      status: TaskStatuses.New,
+      todoListId: 'todoListID1',
+      entityStatus: 'idle',
+      ...restProps,
+    },
+    {
+      id: '2',
+      title: 'JS',
+      status: TaskStatuses.Completed,
+      todoListId: 'todoListID1',
+      entityStatus: 'idle',
+      ...restProps,
+    },
+    {
+      id: '3',
+      title: 'React',
+      status: TaskStatuses.Completed,
+      todoListId: 'todoListID1',
+      entityStatus: 'idle',
+      ...restProps,
+    },
   ],
   todoListID2: [
-    { id: '1', title: 'Babel', status: TaskStatuses.New, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
-    { id: '2', title: 'Webpack', status: TaskStatuses.Completed, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
-    { id: '3', title: 'Gulp', status: TaskStatuses.Completed, todoListId: 'todoListID2', entityStatus: 'idle', ...restProps },
+    {
+      id: '1',
+      title: 'Babel',
+      status: TaskStatuses.New,
+      todoListId: 'todoListID2',
+      entityStatus: 'idle',
+      ...restProps,
+    },
+    {
+      id: '2',
+      title: 'Webpack',
+      status: TaskStatuses.Completed,
+      todoListId: 'todoListID2',
+      entityStatus: 'idle',
+      ...restProps,
+    },
+    {
+      id: '3',
+      title: 'Gulp',
+      status: TaskStatuses.Completed,
+      todoListId: 'todoListID2',
+      entityStatus: 'idle',
+      ...restProps,
+    },
   ],
 }
 
 test('case should remove task in correct todolist', () => {
-  const action = deleteTaskAC('todoListID1', startState.todoListID1[0].id)
+  const action = deleteTask({ todolistID: 'todoListID1', taskID: startState.todoListID1[0].id })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -44,9 +92,15 @@ test('case should remove task in correct todolist', () => {
 })
 
 test('case should add task in correct todolist', () => {
-  const task: TaskType = { id: '4', title: 'SCSS', status: TaskStatuses.New, todoListId: 'todoListID1', ...restProps }
+  const task: TaskType = {
+    id: '4',
+    title: 'SCSS',
+    status: TaskStatuses.New,
+    todoListId: 'todoListID1',
+    ...restProps,
+  }
 
-  const action = createTaskAC(task)
+  const action = createTask({ task })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -58,7 +112,11 @@ test('case should add task in correct todolist', () => {
 })
 
 test('status of specified task should changed', () => {
-  const action = updateTaskAC('todoListID2', '3', { status: TaskStatuses.New })
+  const action = updateTask({
+    todolistID: 'todoListID2',
+    taskID: '3',
+    domainModel: { status: TaskStatuses.New },
+  })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -69,7 +127,11 @@ test('status of specified task should changed', () => {
 test('title of specified task should changed', () => {
   const newTitle = 'Scrum'
 
-  const action = updateTaskAC('todoListID2', '3', { title: newTitle })
+  const action = updateTask({
+    todolistID: 'todoListID2',
+    taskID: '3',
+    domainModel: { title: newTitle },
+  })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -80,7 +142,14 @@ test('title of specified task should changed', () => {
 test('empty array of tasks should be added when new todolist added', () => {
   const tasks: TasksType = { todoListID1: [...startState.todoListID1] }
 
-  const action = createTodolistAC({ id: 'todolistID3', title: 'Title2', addedDate: '', order: 0 })
+  const action = createTodolist({
+    todolist: {
+      id: 'todolistID3',
+      title: 'Title2',
+      addedDate: '',
+      order: 0,
+    },
+  })
 
   const endState: TasksType = taskReducer(tasks, action)
 
@@ -93,7 +162,7 @@ test('empty array of tasks should be added when new todolist added', () => {
 })
 
 test('array of tasks should be deleted when todolist deleted', () => {
-  const action = deleteTodolistAC('todoListID1')
+  const action = deleteTodolist({ todolistID: 'todoListID1' })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -104,7 +173,7 @@ test('array of tasks should be deleted when todolist deleted', () => {
 })
 
 test('tasks should be added to the state when we set todolists', () => {
-  const action = setTodolistsAC(todolists)
+  const action = setTodolists({ todolists })
 
   const endState: TasksType = taskReducer({}, action)
 
@@ -118,7 +187,7 @@ test('tasks should be added to the state when we set todolists', () => {
 test('tasks should be added for todolist when we set tasks', () => {
   const tasks: TaskExtendedType = startState.todoListID1
 
-  const action = setTasksAC('todoListID1', tasks)
+  const action = setTasks({ todolistID: 'todoListID1', tasks })
 
   const endState: TasksType = taskReducer({ todoListID1: [], todoListID2: [] }, action)
 
@@ -127,7 +196,11 @@ test('tasks should be added for todolist when we set tasks', () => {
 })
 
 test('entityStatus of specified task should changed', () => {
-  const action = setTaskEntityStatusAC('todoListID2', '3', 'loading')
+  const action = setTaskEntityStatus({
+    todolistID: 'todoListID2',
+    taskID: '3',
+    entityStatus: 'loading',
+  })
 
   const endState: TasksType = taskReducer(startState, action)
 
