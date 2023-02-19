@@ -1,21 +1,25 @@
-import { ResponseType } from './../api/Todolist-api'
-import { Dispatch } from 'redux'
-import { setAppStatusAC, setAppErrorAC } from '../app/AppReducer'
 import axios, { AxiosError } from 'axios'
+import { Dispatch } from 'redux'
+
+import { setAppStatus, setAppError } from '../app/appSlice'
+import { ResponseType } from '../services/authApi'
 
 export const handleServerNetworkError = (dispatch: Dispatch, error: Error | AxiosError) => {
   if (axios.isAxiosError(error)) {
-    const err = error.response?.data ? (error.response.data as { error: 'string' }).error : error.message
-    dispatch(setAppErrorAC(err))
+    const err = error.response?.data
+      ? (error.response.data as { error: 'string' }).error
+      : error.message
+
+    dispatch(setAppError(err))
   }
-  dispatch(setAppStatusAC('failed'))
+  dispatch(setAppStatus('idle'))
 }
 
 export const handleServerAppError = <D>(dispatch: Dispatch, data: ResponseType<D>) => {
   if (data.messages.length) {
-    dispatch(setAppErrorAC(data.messages[0]))
+    dispatch(setAppError(data.messages[0]))
   } else {
-    dispatch(setAppErrorAC('Some error occurred'))
+    dispatch(setAppError('Some error occurred'))
   }
-  dispatch(setAppStatusAC('failed'))
+  dispatch(setAppStatus('idle'))
 }
