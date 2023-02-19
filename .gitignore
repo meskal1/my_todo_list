@@ -33,6 +33,9 @@ package-lock.json
 .vscode
 
 # My own
+/src/analytics
+/.history
+.stylelintrc.js
 .env
 .env.production
 webpack.config.js
