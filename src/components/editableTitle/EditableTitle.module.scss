@@ -1,0 +1,9 @@
+.editableTitle {
+  display: inline-block;
+  width: 100%;
+  word-break: break-word;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}

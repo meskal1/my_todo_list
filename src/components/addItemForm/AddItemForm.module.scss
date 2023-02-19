@@ -1,0 +1,30 @@
+.addItemFormContainer {
+  display: flex;
+  align-items: center;
+
+  & * {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+  }
+}
+
+.addInputForm {
+  fieldset {
+    border-color: rgb(179 179 179) !important;
+  }
+
+  label {
+    color: rgb(151 151 151);
+    letter-spacing: unset !important;
+  }
+
+  p {
+    position: absolute !important;
+    top: -20px !important;
+    left: -12px !important;
+  }
+
+  div {
+    border-radius: 30px !important;
+  }
+}

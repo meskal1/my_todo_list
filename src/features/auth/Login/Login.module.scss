@@ -1,0 +1,75 @@
+.loginContainer {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 15px;
+}
+
+.loginContent {
+  max-width: 390px;
+  padding: 25px;
+  background: #344fa1;
+  border-radius: 20px;
+}
+
+.loginBlockTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.text {
+  line-height: 22px;
+  text-align: center;
+}
+
+.link {
+  font-weight: 600;
+  color: #5da8ea;
+  text-decoration: underline;
+}
+
+.credentialsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.credentials {
+  font-weight: 600;
+  color: #5da8ea;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    font-family: inherit !important;
+  }
+}
+
+.checkbox {
+  cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin: 0px 0px 15px 0px;
+
+  span {
+    padding: 0px !important;
+  }
+}
+
+.button {
+  border-radius: 30px !important;
+}

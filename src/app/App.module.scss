@@ -1,117 +1,63 @@
-.addInputForm {
-  width: 100%;
-}
-.addItemFormContainer {
-  display: flex;
-}
-.linearProgress {
-  position: absolute !important;
-  top: 60px;
-  width: 100%;
-}
-
-//////TODOLIST////////
-.todolistContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  padding: 10px 10px;
-  flex-basis: 280px;
-  border-radius: 25px;
-  background: #344fa1;
-
-  //   transition: all ease 2s;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  user-select: none;
-}
-.todolistTitleBlock {
-  display: flex;
-  align-items: center;
-  padding: 7px 0px 7px 7px;
-  //   background: #031956;
-  //   background: rgb(70, 29, 29);
-  //  background: #3395fe;
-  border-radius: 18px;
-}
-.todolistTitle {
-  text-align: center;
-  //   color: #97b6fc;
-  color: white;
-  //   color: #ffb300;
-  flex-basis: 100%;
-  font-size: 16px;
-  font-weight: 500;
-  & > span {
-    text-align: center;
-  }
-  &::first-letter {
-    text-transform: uppercase;
-  }
-}
-
-.tasksList {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 5px;
-}
-.blockButtons {
-  display: flex;
-  justify-content: space-between;
-  & > * {
-    //  background: rgb(164, 161, 161) !important;
-    border-radius: 30px !important;
-    padding: 5px 10px !important;
-  }
-}
-///////TASK//////
 .taskContainer {
+  position: relative;
+
   display: flex;
   align-items: center;
+
+  padding: 5px 0;
+
   background: #031956;
   border-radius: 18px;
-  padding: 5px 0;
 }
+
 .taskCheckbox {
   align-self: flex-start;
 }
 
-//////////////
 .error {
   border: red 1px solid;
   outline: none;
 }
+
 .error_message {
   color: red;
 }
+
 .active {
   background: green;
 }
-.completed {
-  opacity: 0.7;
-  text-decoration: line-through;
-}
-///////////////
 
-.editableTitle {
-  width: 100%;
-  display: inline-block;
-  word-break: break-word;
-  &::first-letter {
-    text-transform: uppercase;
-  }
+.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+textarea,
+input {
+  font-family: Montserrat, sans-serif !important;
+  line-height: 18px !important;
+  color: white !important;
+  letter-spacing: 0.5px !important;
 }
 
 .todolistTitleBlock textarea {
-  text-align: center !important;
   font-size: 16px !important;
   font-weight: 500 !important;
+  text-align: center !important;
 }
-textarea,
-input {
-  font-family: 'Montserrat', sans-serif !important;
-  color: white !important;
-  line-height: 18px !important;
-  letter-spacing: 0.5px !important;
+
+.appContainer {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
+  align-items: center;
+
+  line-height: 18px;
+  color: white;
+  letter-spacing: 0.5px;
+
+  background: #031956;
 }

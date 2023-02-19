@@ -1,0 +1,89 @@
+.todolistContainer {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
+  position: relative;
+
+  overflow: hidden;
+  display: flex;
+  flex-basis: 280px;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 10px 10px;
+
+  background: #344fa1;
+  border-radius: 25px;
+  @media (max-width: 600px) {
+    flex-basis: 100%;
+  }
+}
+
+.todolistTitleBlock {
+  display: flex;
+  align-items: center;
+  padding: 7px 0px 7px 7px;
+  //   background: #031956;
+  //   background: rgb(70, 29, 29);
+  //  background: #3395fe;
+  border-radius: 18px;
+}
+
+.todolistTitle {
+  //   color: #ffb300;
+  flex-basis: 100%;
+
+  font-size: 16px;
+  font-weight: 500;
+  //   color: #97b6fc;
+  color: white;
+  text-align: center;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+
+  & > span {
+    text-align: center;
+  }
+}
+
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+}
+
+.blockButtons {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px 0px 0px;
+
+  & > * {
+    padding: 5px 10px !important;
+    font-family: inherit;
+    border-radius: 30px !important;
+  }
+}
+
+.iconButton {
+  align-self: flex-start !important;
+  color: #98b5ff !important;
+}
+
+.loadingProgress {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgb(43 25 243 / 17.8%);
+}
