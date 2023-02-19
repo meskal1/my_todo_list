@@ -1,14 +1,14 @@
 import { v1 } from 'uuid'
 
 import {
-  createTodolist,
-  updateTodolistTitle,
-  deleteTodolist,
-  setTodolists,
   tasksFilterValue,
   TodolistDomainType,
   todolistReducer,
   setTodolistEntityStatus,
+  deleteTodolistTC,
+  getTodolistsTC,
+  createTodolistTC,
+  updateTodolistTitleTC,
 } from './todolistSlice'
 
 export const todolistID1 = v1()
@@ -33,7 +33,11 @@ export const startState: Array<TodolistDomainType> = [
 ]
 
 test('case should remove todolist', () => {
-  const action = deleteTodolist({ todolistID: 'todolistID1' })
+  const action = deleteTodolistTC.fulfilled(
+    { todolistID: 'todolistID1' },
+    'requestId',
+    'todolistID1'
+  )
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -51,7 +55,7 @@ test('case should add todolist', () => {
     entityStatus: 'idle',
   }
 
-  const action = createTodolist({ todolist })
+  const action = createTodolistTC.fulfilled({ todolist }, 'requestId', todolist.title)
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -62,8 +66,12 @@ test('case should add todolist', () => {
 
 test('case should change todolist title', () => {
   const newTitleTodoList = 'Buy a milk'
+  const payload = {
+    todolistID: 'todolistID2',
+    todolistTitle: newTitleTodoList,
+  }
 
-  const action = updateTodolistTitle({ todolistID: 'todolistID2', todolistTitle: newTitleTodoList })
+  const action = updateTodolistTitleTC.fulfilled(payload, 'requestId', payload)
 
   const endState: Array<TodolistDomainType> = todolistReducer(startState, action)
 
@@ -81,7 +89,7 @@ test('case should change todolist filter value', () => {
 })
 
 test('todolists should be set to the state', () => {
-  const action = setTodolists({ todolists: startState })
+  const action = getTodolistsTC.fulfilled({ todolists: startState }, 'requestId', undefined)
 
   const endState: Array<TodolistDomainType> = todolistReducer([], action)
 

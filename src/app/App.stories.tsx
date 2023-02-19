@@ -1,14 +1,16 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { ReduxStoreProviderDecorator } from '../redux/ReduxStoreProviderDecorator'
 import { withRouter } from 'storybook-addon-react-router-v6'
+
 import App from './App'
-import './reset.scss'
+import { storeProviderDecorator } from './storeProviderDecorator'
+
+import '../index.scss'
 
 export default {
   title: 'Todolist/App',
   component: App,
   argTypes: {},
-  decorators: [ReduxStoreProviderDecorator, withRouter],
+  decorators: [storeProviderDecorator, withRouter],
   parameters: {
     reactRouter: {
       routePath: '/',

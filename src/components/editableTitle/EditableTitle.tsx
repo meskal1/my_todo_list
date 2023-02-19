@@ -1,9 +1,11 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useState, memo, FC } from 'react'
+
+import { TextField } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-import { RequestStatusType } from '../../app/AppReducer'
-import { TextField } from '@mui/material'
-import s from '../../app/App.module.scss'
+import { RequestStatusType } from '../../app/appSlice'
+
+import s from './EditableTitle.module.scss'
 
 export type EditableTitleType = {
   itemTitle: string
@@ -11,68 +13,74 @@ export type EditableTitleType = {
   entityStatus: RequestStatusType
 }
 
-export const EditableTitle: React.FC<EditableTitleType> = React.memo(({ itemTitle, onChange, entityStatus }) => {
-  //   console.log('render EDITABLE_TITLE')
-  const [editable, setEditable] = useState(false)
-  const [titleValue, setTitleValue] = useState('')
-
-  const onDoubleClickSpan = () => {
-    if (entityStatus !== 'loading') {
-      setTitleValue(itemTitle)
-      setEditable(true)
-    }
-  }
-
-  const onBlurInput = () => {
-    setEditable(false)
-    if (titleValue !== itemTitle) {
-      onChange(titleValue)
-    }
-  }
-
-  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitleValue(e.currentTarget.value)
-  }
-
-  const onKeyDownInputHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onBlurInput()
-    }
-  }
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#e3f2fd', //this overide blue color
-        light: 'red', //overides light blue
-        dark: 'blue', //overides dark blue color
-      },
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#e3f2fd', //this overide blue color
+      light: 'red', //overides light blue
+      dark: 'blue', //overides dark blue color
     },
-  })
-
-  return (
-    <>
-      {editable ? (
-        <ThemeProvider theme={theme}>
-          <TextField
-            variant='standard'
-            fullWidth
-            multiline={true}
-            size='small'
-            type='text'
-            value={titleValue}
-            onBlur={onBlurInput}
-            onChange={onChangeInput}
-            onKeyDown={onKeyDownInputHandler}
-            onFocus={e => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
-            autoFocus
-          />
-        </ThemeProvider>
-      ) : (
-        <span className={s.editableTitle} onDoubleClick={onDoubleClickSpan}>
-          {itemTitle}
-        </span>
-      )}
-    </>
-  )
+  },
 })
+
+export const EditableTitle: FC<EditableTitleType> = memo(
+  ({ itemTitle, onChange, entityStatus }) => {
+    const [editable, setEditable] = useState(false)
+    const [titleValue, setTitleValue] = useState('')
+
+    const handleDoubleClick = () => {
+      if (entityStatus !== 'loading') {
+        setTitleValue(itemTitle)
+        setEditable(true)
+      }
+    }
+
+    const handleBlurInput = () => {
+      setEditable(false)
+      if (titleValue !== itemTitle) {
+        onChange(titleValue)
+      }
+    }
+
+    const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+      setTitleValue(e.currentTarget.value)
+    }
+
+    const handleKeyDownInput = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        handleBlurInput()
+      }
+    }
+
+    return (
+      <>
+        {editable ? (
+          <ThemeProvider theme={theme}>
+            <TextField
+              variant="standard"
+              fullWidth
+              multiline={true}
+              size="small"
+              type="text"
+              value={titleValue}
+              onBlur={handleBlurInput}
+              onChange={handleChangeInput}
+              onKeyDown={handleKeyDownInput}
+              autoFocus
+              onFocus={e =>
+                e.currentTarget.setSelectionRange(
+                  e.currentTarget.value.length,
+                  e.currentTarget.value.length
+                )
+              }
+            />
+          </ThemeProvider>
+        ) : (
+          <span className={s.editableTitle} onDoubleClick={handleDoubleClick}>
+            {itemTitle}
+          </span>
+        )}
+      </>
+    )
+  }
+)

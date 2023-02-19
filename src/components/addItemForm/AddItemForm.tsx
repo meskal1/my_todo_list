@@ -1,64 +1,67 @@
-import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
-import s from '../../app/App.module.scss'
-import { IconButton, TextField } from '@mui/material'
+import { ChangeEvent, useState, KeyboardEvent, memo, FC } from 'react'
+
 import { ControlPoint } from '@mui/icons-material'
+import { IconButton, TextField } from '@mui/material'
+
+import { cutSpaces } from '../../utils/cutSpaces'
+
+import s from './AddItemForm.module.scss'
 
 export type AddItemFormType = {
   addItem: (itemTitle: string) => void
   isDisabled?: boolean
   label?: string
+  className?: string
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, isDisabled, label }) => {
-  //   console.log('render ADD_INPUT')
-  const [error, setError] = useState<string>('')
-  const [inputValue, setInputValue] = useState('')
+export const AddItemForm: FC<AddItemFormType> = memo(
+  ({ addItem, isDisabled = false, label = 'Type value', className = '' }) => {
+    const [error, setError] = useState('')
+    const [inputValue, setInputValue] = useState('')
 
-  const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setError('')
-    setInputValue(e.currentTarget.value)
-  }
-
-  const onClickCreateTask = () => {
-    if (inputValue.trim().length !== 0) {
-      addItem(inputValue.trim())
-      setInputValue('')
-    } else {
-      setError('Title is required')
+    const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+      setError('')
+      setInputValue(e.currentTarget.value)
     }
-  }
 
-  const onKeyDownCreateTask = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onClickCreateTask()
+    const handleClickCreateTask = () => {
+      if (cutSpaces(inputValue) !== '') {
+        addItem(cutSpaces(inputValue))
+        setInputValue('')
+      } else {
+        setError('Title is required')
+      }
     }
-  }
 
-  const onBlurInput = () => {
-    setError('')
-  }
+    const handleKeyDownCreateTask = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        handleClickCreateTask()
+      }
+    }
 
-  return (
-    <>
-      <div className={s.addItemFormContainer}>
+    const handleBlurInput = () => setError('')
+
+    return (
+      <div className={`${s.addItemFormContainer} ${className}`}>
         <TextField
           fullWidth
-          size='small'
+          size="small"
           className={s.addInputForm}
           disabled={isDisabled}
           error={!!error}
-          label={label || 'Type value'}
+          label={label}
           helperText={error}
           value={inputValue}
-          onBlur={onBlurInput}
-          onChange={onChangeInputHandler}
-          onKeyPress={onKeyDownCreateTask}
-          autoComplete='off'
+          onFocus={handleBlurInput}
+          onBlur={handleBlurInput}
+          onChange={handleChangeInput}
+          onKeyPress={handleKeyDownCreateTask}
+          autoComplete="off"
         />
-        <IconButton onClick={onClickCreateTask} disabled={isDisabled}>
-          <ControlPoint fontSize='small' />
+        <IconButton onClick={handleClickCreateTask} disabled={isDisabled}>
+          <ControlPoint fontSize="small" />
         </IconButton>
       </div>
-    </>
-  )
-})
+    )
+  }
+)

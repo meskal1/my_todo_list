@@ -1,6 +1,7 @@
-import { AddItemForm } from './AddItemForm'
 import { action } from '@storybook/addon-actions'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
+
+import { AddItemForm } from './AddItemForm'
 
 export default {
   title: 'Todolist/AddItemForm',
@@ -15,7 +16,9 @@ AddItemFormExample.args = {
   addItem: action('Add Button or key "Enter" was pressed inside form'),
 }
 
-const TemplateDisabled: ComponentStory<typeof AddItemForm> = args => <AddItemForm {...args} isDisabled={true} />
+const TemplateDisabled: ComponentStory<typeof AddItemForm> = args => (
+  <AddItemForm {...args} isDisabled={true} />
+)
 
 export const AddItemFormExampleDisabled = TemplateDisabled.bind({})
 

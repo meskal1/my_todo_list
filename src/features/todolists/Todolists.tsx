@@ -1,51 +1,46 @@
-import React, { useEffect } from 'react'
-import { TodolistDomainType, fetchTodolistsTC } from './todolist/TodolistReducer'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { useEffect, memo, FC } from 'react'
 
-import { Box } from '@mui/material'
-import { TasksType } from './todolist/task/TaskReducer'
-import { Todolist } from './todolist/Todolist'
 import { useNavigate } from 'react-router'
+
+import { PATH } from '../../constants/routePaths.enum'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
+
+import { Todolist } from './Todolist/Todolist'
+import { TodolistDomainType, getTodolistsTC } from './Todolist/todolistSlice'
+import s from './Todolists.module.scss'
 
 export type TodolistsType = {
   isLoggedIn: boolean
   demo?: boolean
 }
 
-export const Todolists: React.FC<TodolistsType> = React.memo(({ demo = false, isLoggedIn }) => {
-  console.log(4)
-  const dispatch = useAppDispatch()
-  const todolistsData = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
-  const tasksData = useAppSelector<TasksType>(state => state.tasks)
+export const Todolists: FC<TodolistsType> = memo(({ demo = false, isLoggedIn }) => {
   const navigate = useNavigate()
-
-  const todolists = todolistsData.map(todolist => {
-    let filteredTasks = tasksData[todolist.id]
-    return (
-      <Todolist
-        key={todolist.id}
-        todolistID={todolist.id}
-        tasks={filteredTasks}
-        title={todolist.title}
-        filterValue={todolist.filter}
-        entityStatus={todolist.entityStatus}
-      />
-    )
-  })
+  const dispatch = useAppDispatch()
+  const todolists = useAppSelector<TodolistDomainType[]>(state => state.todolists)
 
   useEffect(() => {
     if (!demo && isLoggedIn) {
-      dispatch(fetchTodolistsTC())
+      dispatch(getTodolistsTC())
     } else {
-      navigate('login')
+      navigate(PATH.LOGIN)
     }
   }, [isLoggedIn])
 
   return (
-    <>
-      <Box display={'flex'} justifyContent={'center'} flexWrap={'wrap'} gap={'10px'} p={'0 15px'}>
-        {todolists}
-      </Box>
-    </>
+    <div className={s.todolistsContainer}>
+      {todolists.map(todolist => {
+        return (
+          <Todolist
+            key={todolist.id}
+            todolistID={todolist.id}
+            title={todolist.title}
+            filterValue={todolist.filter}
+            entityStatus={todolist.entityStatus}
+          />
+        )
+      })}
+    </div>
   )
 })

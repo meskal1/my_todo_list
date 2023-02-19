@@ -1,6 +1,6 @@
 import { TaskPriorities, TaskStatuses } from '../../../constants/task.enum'
 import { TaskType } from '../../../services/todolistApi'
-import { createTodolist, deleteTodolist, setTodolists } from '../Todolist/todolistSlice'
+import { createTodolistTC, deleteTodolistTC, getTodolistsTC } from '../Todolist/todolistSlice'
 import {
   startState as todolists,
   todolistID1 as todolistId1,
@@ -8,14 +8,14 @@ import {
 } from '../Todolist/todolistSlice.test.'
 
 import {
-  createTask,
-  deleteTask,
+  createTaskTC,
+  deleteTaskTC,
+  getTasksTC,
   setTaskEntityStatus,
-  setTasks,
   TaskExtendedType,
   taskReducer,
   TasksType,
-  updateTask,
+  updateTaskTC,
 } from './taskSlice'
 
 const restProps = {
@@ -82,9 +82,11 @@ const startState: TasksType = {
 }
 
 test('case should remove task in correct todolist', () => {
-  const action = deleteTask({ todolistID: 'todoListID1', taskID: startState.todoListID1[0].id })
+  const param = { todolistID: 'todoListID1', taskID: startState.todoListID1[0].id }
 
-  const endState: TasksType = taskReducer(startState, action)
+  const action = deleteTaskTC.fulfilled(param, 'requestId', param)
+
+  const endState = taskReducer(startState, action)
 
   expect(endState.todoListID1.length).toBe(2)
   expect(endState.todoListID1.every(t => t.id != '1')).toBeTruthy()
@@ -100,7 +102,10 @@ test('case should add task in correct todolist', () => {
     ...restProps,
   }
 
-  const action = createTask({ task })
+  const action = createTaskTC.fulfilled(task, 'requestId', {
+    todolistID: task.todoListId,
+    taskTitle: task.title,
+  })
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -112,11 +117,12 @@ test('case should add task in correct todolist', () => {
 })
 
 test('status of specified task should changed', () => {
-  const action = updateTask({
+  const updateModel = {
     todolistID: 'todoListID2',
     taskID: '3',
     domainModel: { status: TaskStatuses.New },
-  })
+  }
+  const action = updateTaskTC.fulfilled(updateModel, 'requestId', updateModel)
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -126,12 +132,12 @@ test('status of specified task should changed', () => {
 
 test('title of specified task should changed', () => {
   const newTitle = 'Scrum'
-
-  const action = updateTask({
+  const updateModel = {
     todolistID: 'todoListID2',
     taskID: '3',
     domainModel: { title: newTitle },
-  })
+  }
+  const action = updateTaskTC.fulfilled(updateModel, 'requestId', updateModel)
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -141,15 +147,14 @@ test('title of specified task should changed', () => {
 
 test('empty array of tasks should be added when new todolist added', () => {
   const tasks: TasksType = { todoListID1: [...startState.todoListID1] }
+  const todolist = {
+    id: 'todolistID3',
+    title: 'Title2',
+    addedDate: '',
+    order: 0,
+  }
 
-  const action = createTodolist({
-    todolist: {
-      id: 'todolistID3',
-      title: 'Title2',
-      addedDate: '',
-      order: 0,
-    },
-  })
+  const action = createTodolistTC.fulfilled({ todolist }, 'requestId', todolist.title)
 
   const endState: TasksType = taskReducer(tasks, action)
 
@@ -162,7 +167,11 @@ test('empty array of tasks should be added when new todolist added', () => {
 })
 
 test('array of tasks should be deleted when todolist deleted', () => {
-  const action = deleteTodolist({ todolistID: 'todoListID1' })
+  const action = deleteTodolistTC.fulfilled(
+    { todolistID: 'todoListID1' },
+    'requestId',
+    'todoListID1'
+  )
 
   const endState: TasksType = taskReducer(startState, action)
 
@@ -173,7 +182,7 @@ test('array of tasks should be deleted when todolist deleted', () => {
 })
 
 test('tasks should be added to the state when we set todolists', () => {
-  const action = setTodolists({ todolists })
+  const action = getTodolistsTC.fulfilled({ todolists }, 'requestId', undefined)
 
   const endState: TasksType = taskReducer({}, action)
 
@@ -187,7 +196,11 @@ test('tasks should be added to the state when we set todolists', () => {
 test('tasks should be added for todolist when we set tasks', () => {
   const tasks: TaskExtendedType = startState.todoListID1
 
-  const action = setTasks({ todolistID: 'todoListID1', tasks })
+  const action = getTasksTC.fulfilled(
+    { todolistID: 'todoListID1', tasks },
+    'requestId',
+    'todoListID1'
+  )
 
   const endState: TasksType = taskReducer({ todoListID1: [], todoListID2: [] }, action)
 

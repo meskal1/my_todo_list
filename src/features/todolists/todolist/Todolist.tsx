@@ -1,113 +1,121 @@
-import { Button, IconButton } from '@mui/material'
-import React, { useCallback } from 'react'
-import { TaskExtendedType, createTaskTC } from './task/TaskReducer'
-import { deleteTodolistTC, tasksFilterValueAC, updateTodolistTitleTC } from './TodolistReducer'
+import { useCallback, memo, FC } from 'react'
 
-import { AddItemForm } from '../../../components/addItemForm/AddItemForm'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { EditableTitle } from '../../../components/editableTitle/EditableTitle'
-import { RequestStatusType } from '../../../app/AppReducer'
-import { Task } from './task/Task'
-import { TaskStatuses } from '../../../api/Todolist-api'
-import s from '../../../app/App.module.scss'
-import { useAppDispatch } from '../../../redux/hooks'
+import { Button, IconButton } from '@mui/material'
+
+import { RequestStatusType } from '../../../app/appSlice'
+import { AddItemForm } from '../../../components/AddItemForm/AddItemForm'
+import { EditableTitle } from '../../../components/EditableTitle/EditableTitle'
+import { LoadingProgress } from '../../../components/LoadingProgress/LoadingProgress'
+import { TaskStatuses } from '../../../constants/task.enum'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
+import { Task } from '../Task/Task'
+import { createTaskTC, TasksType } from '../Task/taskSlice'
+
+import s from './Todolist.module.scss'
+import { updateTodolistTitleTC, tasksFilterValue, deleteTodolistTC } from './todolistSlice'
 
 type TodolistType = {
   todolistID: string
   title: string
   filterValue: string
-  tasks: TaskExtendedType
   entityStatus: RequestStatusType
 }
 
-export const Todolist: React.FC<TodolistType> = React.memo(({ todolistID, title, filterValue, tasks, entityStatus }) => {
-  //   console.log(`render TODOLIST ${todolistID}`)
-  const dispatch = useAppDispatch()
-  let filteredTasks = tasks
+export const Todolist: FC<TodolistType> = memo(
+  ({ todolistID, title, filterValue, entityStatus }) => {
+    const dispatch = useAppDispatch()
+    const tasks = useAppSelector<TasksType>(state => state.tasks)
+    const appStatus = useAppSelector(state => state.app.status)
+    const isDisabled = entityStatus === 'loading'
+    let filteredTasks = tasks[todolistID]
 
-  if (filterValue === 'active') {
-    filteredTasks = filteredTasks.filter(taskElement => taskElement.status === TaskStatuses.New)
-  }
+    if (filterValue === 'active') {
+      filteredTasks = filteredTasks.filter(taskElement => taskElement.status === TaskStatuses.New)
+    }
 
-  if (filterValue === 'completed') {
-    filteredTasks = filteredTasks.filter(taskElement => taskElement.status === TaskStatuses.Completed)
-  }
+    if (filterValue === 'completed') {
+      filteredTasks = filteredTasks.filter(
+        taskElement => taskElement.status === TaskStatuses.Completed
+      )
+    }
 
-  const tasksData = filteredTasks.map(taskElement => {
-    return (
-      <Task
-        key={taskElement.id}
-        taskID={taskElement.id}
-        taskTitle={taskElement.title}
-        status={taskElement.status}
-        entityStatus={taskElement.entityStatus}
-        todolistID={todolistID}
-      />
+    const handleChangeTodolistTitle = useCallback((todolistTitle: string) => {
+      dispatch(updateTodolistTitleTC({ todolistID, todolistTitle }))
+    }, [])
+
+    const handleClickCreateTask = useCallback(
+      (taskTitle: string) => {
+        dispatch(createTaskTC({ todolistID, taskTitle }))
+      },
+      [todolistID]
     )
-  })
 
-  const onChangeTodolistTitle = useCallback((todolistTitle: string) => {
-    dispatch(updateTodolistTitleTC(todolistID, todolistTitle))
-  }, [])
+    const handleAllClick = useCallback(() => {
+      dispatch(tasksFilterValue({ todolistID, filterValue: 'all' }))
+    }, [])
 
-  const onClickCreateTask = useCallback(
-    (taskTitle: string) => {
-      dispatch(createTaskTC(todolistID, taskTitle))
-    },
-    [todolistID]
-  )
+    const handleActiveClick = useCallback(() => {
+      dispatch(tasksFilterValue({ todolistID, filterValue: 'active' }))
+    }, [])
 
-  const onAllClick = useCallback(() => {
-    dispatch(tasksFilterValueAC(todolistID, 'all'))
-  }, [])
+    const handleCompletedClick = useCallback(() => {
+      dispatch(tasksFilterValue({ todolistID, filterValue: 'completed' }))
+    }, [])
 
-  const onActiveClick = useCallback(() => {
-    dispatch(tasksFilterValueAC(todolistID, 'active'))
-  }, [])
+    const handleClickDelete = useCallback(() => {
+      dispatch(deleteTodolistTC(todolistID))
+    }, [])
 
-  const onCompletedClick = useCallback(() => {
-    dispatch(tasksFilterValueAC(todolistID, 'completed'))
-  }, [])
-
-  const onClickDelete = useCallback(() => {
-    dispatch(deleteTodolistTC(todolistID))
-  }, [])
-
-  return (
-    <>
+    return (
       <div className={s.todolistContainer}>
         <div className={s.todolistTitleBlock}>
           <h2 className={s.todolistTitle}>
-            <EditableTitle itemTitle={title} onChange={onChangeTodolistTitle} entityStatus={entityStatus} />
+            <EditableTitle
+              itemTitle={title}
+              onChange={handleChangeTodolistTitle}
+              entityStatus={entityStatus}
+            />
           </h2>
-          <IconButton onClick={onClickDelete} disabled={entityStatus === 'loading'} sx={{ alignSelf: 'flex-start', color: '#98b5ff' }}>
-            <DeleteIcon fontSize='small' />
+          <IconButton className={s.iconButton} onClick={handleClickDelete} disabled={isDisabled}>
+            <DeleteIcon fontSize="small" />
           </IconButton>
         </div>
-        <AddItemForm addItem={onClickCreateTask} isDisabled={entityStatus === 'loading'} label={'Add task'} />
-        <ul className={s.tasksList}>{tasksData}</ul>
+        <AddItemForm addItem={handleClickCreateTask} isDisabled={isDisabled} label={'Add task'} />
+        <ul className={s.tasksList}>
+          {filteredTasks?.map(taskElement => {
+            return (
+              <Task
+                key={taskElement.id}
+                taskID={taskElement.id}
+                taskTitle={taskElement.title}
+                status={taskElement.status}
+                entityStatus={taskElement.entityStatus}
+                todolistID={todolistID}
+              />
+            )
+          })}
+        </ul>
         <div className={s.blockButtons}>
-          <Button
-            variant={filterValue === 'all' ? 'contained' : 'text'}
-            onClick={onAllClick}
-            sx={{
-              borderRadius: '30px',
-              bgcolor: '#F8C655',
-              color: 'black',
-              fontWeight: '800',
-              fontFamily: 'Montserrat, sans-serif',
-              letterSpacing: '0.5px',
-            }}>
+          <Button variant={filterValue === 'all' ? 'contained' : 'text'} onClick={handleAllClick}>
             All
           </Button>
-          <Button variant={filterValue === 'active' ? 'contained' : 'text'} onClick={onActiveClick}>
+          <Button
+            variant={filterValue === 'active' ? 'contained' : 'text'}
+            onClick={handleActiveClick}
+          >
             Active
           </Button>
-          <Button variant={filterValue === 'completed' ? 'contained' : 'text'} onClick={onCompletedClick}>
+          <Button
+            variant={filterValue === 'completed' ? 'contained' : 'text'}
+            onClick={handleCompletedClick}
+          >
             Completed
           </Button>
         </div>
+        {appStatus === 'loading' && <div className={s.loadingProgress} />}
       </div>
-    </>
-  )
-})
+    )
+  }
+)
